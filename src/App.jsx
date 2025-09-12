@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ArrowRight, Shield, Timer, Wrench, Star, CheckCircle2, Phone, MessageCircle } from 'lucide-react'
 import React from "react";
 
-const WHATSAPP = 'https://wa.me/5493510000000' // TODO: reemplazar con tu número
+const WHATSAPP = 'https://wa.me/5493512042126' // TODO: reemplazar con tu número
 
 const nav = [
   { id: 'inicio', label: 'Inicio' },
@@ -71,7 +71,8 @@ export default function App() {
                 animate={{ x: 0 }}
                 exit={{ x: '100%' }}
                 transition={{ type: 'tween', duration: 0.25 }}
-                className="ml-auto h-full w-80 bg-card p-6 shadow-soft"
+                className="fixed top-0 right-0 h-screen w-full max-w-xs sm:max-w-sm bg-surface/90 text-white p-6 shadow-lg flex flex-col"
+
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="flex items-center justify-between">
@@ -83,13 +84,23 @@ export default function App() {
                     <X />
                   </button>
                 </div>
-                <div className="mt-6 grid gap-2">
-                  {nav.map((n) => (
-                    <a key={n.id} href={`#${n.id}`} onClick={() => setOpen(false)} className="rounded-xl px-3 py-3 hover:bg-white/5">
-                      {n.label}
-                    </a>
-                  ))}
-                </div>
+                <div className="mt-6">
+  <nav
+    className="flex flex-col gap-2 border-t border-white/10 pt-6"
+    role="navigation"
+  >
+    {nav.map((n) => (
+      <a
+        key={n.id}
+        href={`#${n.id}`}
+        onClick={() => setOpen(false)}
+        className="rounded-lg px-4 py-3 text-base font-medium hover:bg-accent/20 transition-colors"
+      >
+        {n.label}
+      </a>
+    ))}
+  </nav>
+</div>
                 <div className="mt-6 grid gap-3">
                   <a href={WHATSAPP} target="_blank" className="btn btn-outline w-full justify-center">
                     <Phone size={18}/> Llamar
@@ -175,13 +186,30 @@ export default function App() {
           <motion.h2 {...fadeIn} className="text-3xl md:text-4xl font-bold">Galería</motion.h2>
           <p className="mt-3 text-muted">Algunos trabajos recientes. Reemplazá estas imágenes por fotos reales.</p>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <motion.div key={i} {...fadeIn} className="relative overflow-hidden rounded-3xl ring-1 ring-white/10">
-                <div className="aspect-[4/3] bg-gradient-to-br from-brand/80 to-accent/70"></div>
-                <span className="absolute bottom-3 right-3 rounded-full bg-black/30 px-2 py-1 text-xs">Proyecto #{i+1}</span>
-              </motion.div>
-            ))}
-          </div>
+  {[
+    "/img/proyecto1.jpeg",
+    "/img/proyecto2.jpeg",
+    "/img/proyecto3.jpeg",
+    "/img/proyecto4.jpeg",
+    "/img/proyecto5.jpeg",
+    "/img/proyecto6.jpeg"
+  ].map((src, i) => (
+    <motion.div
+      key={i}
+      {...fadeIn}
+      className="relative overflow-hidden rounded-3xl ring-1 ring-white/10 group"
+    >
+      <img
+        src={src}
+        alt={`Proyecto ${i + 1}`}
+        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+      />
+      <span className="absolute bottom-3 right-3 rounded-full bg-black/50 text-white px-2 py-1 text-xs">
+        Proyecto #{i + 1}
+      </span>
+    </motion.div>
+  ))}
+</div>
         </div>
       </section>
 

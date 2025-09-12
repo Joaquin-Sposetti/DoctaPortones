@@ -33,3 +33,7 @@ html, body, #root {
 .card {
   @apply bg-card/60 backdrop-blur rounded-3xl p-6 border border-white/5;
 }
+
+.menu-panel {
+  @apply bg-[#154F54] text-white p-6 shadow-lg;
+}
