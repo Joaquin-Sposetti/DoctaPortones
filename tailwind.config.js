@@ -30,7 +30,7 @@ export default {
           800: '#26393D',
           900: '#192628'
         },
-        surface: '#0B2C30',      // deep teal background
+        surface: '#0B2C30',      
         card: '#0F3B40',
         foreground: '#EAF1F2',
         muted: '#9FB6B9'
