@@ -104,7 +104,7 @@ export default function App() {
     <div className="hidden md:flex items-center gap-6 ml-8 pl-8 border-l border-gray-200">
       <div className="flex items-center gap-3">
         <a
-          href="hhttps://www.instagram.com/docta.portones/"
+          href="https://www.instagram.com/docta.portones/"
           title="Instagram"
           target="_blank"
           className="text-gray-500 hover:text-[#154f54] transition"
