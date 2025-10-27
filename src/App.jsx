@@ -9,7 +9,7 @@ import React from "react"
 import { Instagram, Facebook, Linkedin } from 'lucide-react'
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000"
-const WHATSAPP = 'https://wa.me/5493512042126'
+const WHATSAPP = 'https://wa.me/5493518791565'
 
 const nav = [
   { id: 'inicio', label: 'Inicio' },
@@ -211,7 +211,7 @@ export default function App() {
             
             
   <a
-    href="tel:+5493510000000"
+    href="tel:+5493518791565"
     className="flex items-center justify-center gap-2 border border-[#0e5451] text-[#0e5451] font-medium py-2 rounded-xl hover:bg-[#0e5451]/10 transition text-sm md:text-base"
   >
     <svg
@@ -467,7 +467,7 @@ export default function App() {
 
         <div className="flex flex-wrap gap-4 justify-end">
           <a
-            href="https://wa.me/5493512042126"
+            href="https://wa.me/5493518791565"
             target="_blank"
             className="flex items-center gap-2 border border-[#154f54] text-[#154f54] px-5 py-3 rounded-xl hover:bg-[#154f54] hover:text-white transition"
           >
