@@ -15,9 +15,9 @@ const nav = [
   { id: 'inicio', label: 'Inicio' },
   { id: 'productos', label: 'Productos' },
   { id: 'galeria', label: 'Galería' },
-  { id: 'pasos', label: 'Cómo trabajamos' },
+  { id: 'pasos', label: 'Proceso' },
   { id: 'faq', label: 'Preguntas' },
-  { id: 'nosotros', label: 'Sobre nosotros' }, // 👈 nuevo
+  { id: 'nosotros', label: 'Nosotros' }, // 👈 nuevo
   { id: 'contacto', label: 'Contacto' },
 ]
 
@@ -74,275 +74,278 @@ export default function App() {
 
       {/* NAVBAR */}
       {/* NAVBAR */}
-<header className="sticky top-0 z-50 border-b border-gray-200 bg-white/90 backdrop-blur-lg shadow-[0_2px_8px_rgba(0,0,0,0.03)]">
-  <div className="container flex h-20 items-center justify-between px-10 mx-auto max-w-7xl">
+      <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/90 backdrop-blur-lg shadow-[0_2px_8px_rgba(0,0,0,0.03)]">
+        <div className="container flex h-20 items-center justify-between px-10 mx-auto max-w-7xl">
 
-    {/* Logo solo la D (mantiene proporción) */}
-    <a href="#inicio" className="flex items-center hover:scale-[1.05] transition-transform">
-      <img
-        src="/icon.png"
-        alt="Docta Portones"
-        className="h-12 w-auto object-contain"
-        style={{ minWidth: "50px" }}
-      />
-    </a>
+          {/* Logo solo la D (mantiene proporción) */}
+          <a href="#inicio" className="flex items-center hover:scale-[1.05] transition-transform">
+            <img
+              src="/icon.png"
+              alt="Docta Portones"
+              className="h-12 w-auto object-contain"
+              style={{ minWidth: "50px" }}
+            />
+          </a>
 
-    {/* Navegación principal */}
-    <nav className="hidden md:flex items-center gap-12 ml-10">
-      {nav.map((n) => (
-        <a
-          key={n.id}
-          href={`#${n.id}`}
-          className="text-[15px] font-medium text-gray-600 hover:text-[#154f54] transition-colors"
-        >
-          {n.label}
-        </a>
-      ))}
-    </nav>
+          {/* Navegación principal */}
+          <nav className="hidden md:flex items-center gap-12 ml-10">
+            {nav.map((n) => (
+              <a
+                key={n.id}
+                href={`#${n.id}`}
+                className="text-[15px] font-medium text-gray-600 hover:text-[#154f54] transition-colors"
+              >
+                {n.label}
+              </a>
+            ))}
+          </nav>
 
-    {/* Redes + Botones */}
-    <div className="hidden md:flex items-center gap-6 ml-8 pl-8 border-l border-gray-200">
-      <div className="flex items-center gap-3">
-        <a
-          href="https://www.instagram.com/docta.portones/"
-          title="Instagram"
-          target="_blank"
-          className="text-gray-500 hover:text-[#154f54] transition"
-        >
-          <Instagram size={20} />
-        </a>
-        <a
-          href="https://facebook.com"
-          title="Facebook"
-          target="_blank"
-          className="text-gray-500 hover:text-[#154f54] transition"
-        >
-          <Facebook size={20} />
-        </a>
-        <a
-          href="https://linkedin.com"
-          title="LinkedIn"
-          target="_blank"
-          className="text-gray-500 hover:text-[#154f54] transition"
-        >
-          <Linkedin size={20} />
-        </a>
-      </div>
-
-      <div className="flex items-center gap-4">
-        {/* Botón Llamar */}
-        <a
-          href={WHATSAPP}
-          target="_blank"
-          className="flex items-center justify-center gap-2 border border-[#154f54] text-[#154f54] px-5 py-2.5 rounded-lg hover:bg-[#154f54] hover:text-white transition shadow-sm hover:shadow-md font-medium leading-none"
-          style={{ minWidth: "120px", height: "45px" }}
-        >
-          <Phone size={18} /> Llamar
-        </a>
-
-        {/* Botón Presupuesto */}
-        <a
-          href="#contacto"
-          className="flex items-center justify-center gap-2 bg-[#154f54] text-white px-5 py-2.5 rounded-lg hover:bg-[#1b676b] transition shadow-sm hover:shadow-md font-medium leading-none"
-          style={{ minWidth: "160px", height: "45px" }}
-        >
-          Pedir presupuesto <ArrowRight size={16} />
-        </a>
-      </div>
-    </div>
-
-    {/* Menú Mobile */}
-    <button
-      className="md:hidden rounded-xl p-2 hover:bg-gray-100"
-      onClick={() => setOpen(true)}
-      aria-label="Abrir menú"
-    >
-      <Menu />
-    </button>
-  </div>
-
-  {/* MOBILE MENU */}
-  <AnimatePresence>
-    {open && (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
-        onClick={() => setOpen(false)}
-      >
-        <motion.div
-          initial={{ x: '100%' }}
-          animate={{ x: 0 }}
-          exit={{ x: '100%' }}
-          transition={{ type: 'tween', duration: 0.25 }}
-          className="fixed top-0 right-0 h-screen w-full max-w-xs sm:max-w-sm bg-white text-gray-800 p-6 shadow-lg flex flex-col"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="flex items-center justify-between">
+          {/* Redes + Botones */}
+          <div className="hidden md:flex items-center gap-6 ml-8 pl-8 border-l border-gray-200">
             <div className="flex items-center gap-3">
-              <img src="/icon.png" className="h-9 w-auto object-contain" />
-              <span className="font-bold text-[#154f54]">Menú</span>
+              <a
+                href="https://www.instagram.com/docta.portones/"
+                title="Instagram"
+                target="_blank"
+                className="text-gray-500 hover:text-[#154f54] transition"
+              >
+                <Instagram size={20} />
+              </a>
+              <a
+                href="https://facebook.com"
+                title="Facebook"
+                target="_blank"
+                className="text-gray-500 hover:text-[#154f54] transition"
+              >
+                <Facebook size={20} />
+              </a>
+              <a
+                href="https://linkedin.com"
+                title="LinkedIn"
+                target="_blank"
+                className="text-gray-500 hover:text-[#154f54] transition"
+              >
+                <Linkedin size={20} />
+              </a>
             </div>
-            <button
-              className="rounded-xl p-2 hover:bg-gray-100"
+
+            <div className="flex items-center gap-4">
+              {/* Botón Llamar */}
+              <a
+                href={WHATSAPP}
+                target="_blank"
+                className="flex items-center justify-center gap-2 border border-[#154f54] text-[#154f54] px-5 py-2.5 rounded-lg hover:bg-[#154f54] hover:text-white transition shadow-sm hover:shadow-md font-medium leading-none"
+                style={{ minWidth: "120px", height: "45px" }}
+              >
+                <Phone size={18} /> Llamar
+              </a>
+
+              {/* Botón Presupuesto */}
+              <a
+                href="#contacto"
+                className="flex items-center justify-center gap-2 bg-[#154f54] text-white px-5 py-2.5 rounded-lg hover:bg-[#1b676b] transition shadow-sm hover:shadow-md font-medium leading-none"
+                style={{ minWidth: "160px", height: "45px" }}
+              >
+                Pedir presupuesto <ArrowRight size={16} />
+              </a>
+            </div>
+          </div>
+
+          {/* Menú Mobile */}
+          <button
+            className="md:hidden rounded-xl p-2 hover:bg-gray-100"
+            onClick={() => setOpen(true)}
+            aria-label="Abrir menú"
+          >
+            <Menu />
+          </button>
+        </div>
+
+        {/* MOBILE MENU */}
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
               onClick={() => setOpen(false)}
             >
-              <X />
-            </button>
-          </div>
+              <motion.div
+                initial={{ x: '100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: '100%' }}
+                transition={{ type: 'tween', duration: 0.25 }}
+                className="fixed top-0 right-0 h-screen w-full max-w-xs sm:max-w-sm bg-white text-gray-800 p-6 shadow-lg flex flex-col"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <img src="/icon.png" className="h-9 w-auto object-contain" />
+                    <span className="font-bold text-[#154f54]">Menú</span>
+                  </div>
+                  <button
+                    className="rounded-xl p-2 hover:bg-gray-100"
+                    onClick={() => setOpen(false)}
+                  >
+                    <X />
+                  </button>
+                </div>
 
-          <div className="mt-6">
-            <nav className="flex flex-col gap-2 border-t border-gray-200 pt-6" role="navigation">
-              {nav.map((n) => (
-                <a
-                  key={n.id}
-                  href={`#${n.id}`}
-                  onClick={() => setOpen(false)}
-                  className="rounded-lg px-4 py-3 text-base font-medium hover:bg-gray-100 transition-colors"
-                >
-                  {n.label}
-                </a>
-              ))}
-            </nav>
-          </div>
+                <div className="mt-6">
+                  <nav className="flex flex-col gap-2 border-t border-gray-200 pt-6" role="navigation">
+                    {nav.map((n) => (
+                      <a
+                        key={n.id}
+                        href={`#${n.id}`}
+                        onClick={() => setOpen(false)}
+                        className="rounded-lg px-4 py-3 text-base font-medium hover:bg-gray-100 transition-colors"
+                      >
+                        {n.label}
+                      </a>
+                    ))}
+                  </nav>
+                </div>
 
-          <div className="flex flex-col gap-3 mt-4 w-full px-4">
-            
-            
-  <a
-    href="tel:+5493518791565"
-    className="flex items-center justify-center gap-2 border border-[#0e5451] text-[#0e5451] font-medium py-2 rounded-xl hover:bg-[#0e5451]/10 transition text-sm md:text-base"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth="1.8"
-      stroke="currentColor"
-      className="w-4 h-4"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M2.25 6.75c0 8.284 6.716 15 15 15h1.5a2.25 2.25 0 002.25-2.25v-2.25a1.5 1.5 0 00-1.5-1.5h-3a.75.75 0 00-.75.75v1.5a.75.75 0 01-.75.75 12 12 0 01-12-12 .75.75 0 01.75-.75h1.5a.75.75 0 00.75-.75v-3a1.5 1.5 0 00-1.5-1.5H4.5A2.25 2.25 0 002.25 6.75z"
-      />
-    </svg>
-    Llamar
-  </a>
+                <div className="flex flex-col gap-3 mt-4 w-full px-4">
 
-  <a
-    href="#contacto"
-    className="flex items-center justify-center gap-2 bg-[#0e5451] text-white font-semibold py-2 rounded-xl hover:bg-[#0b3f3c] transition text-sm md:text-base"
-  >
-    Pedir presupuesto
-  </a>
-</div>
-        </motion.div>
-      </motion.div>
-    )}
-  </AnimatePresence>
-</header>
+
+                  <a
+                    href="tel:+5493518791565"
+                    className="flex items-center justify-center gap-2 border border-[#0e5451] text-[#0e5451] font-medium py-2 rounded-xl hover:bg-[#0e5451]/10 transition text-sm md:text-base"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.8"
+                      stroke="currentColor"
+                      className="w-4 h-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M2.25 6.75c0 8.284 6.716 15 15 15h1.5a2.25 2.25 0 002.25-2.25v-2.25a1.5 1.5 0 00-1.5-1.5h-3a.75.75 0 00-.75.75v1.5a.75.75 0 01-.75.75 12 12 0 01-12-12 .75.75 0 01.75-.75h1.5a.75.75 0 00.75-.75v-3a1.5 1.5 0 00-1.5-1.5H4.5A2.25 2.25 0 002.25 6.75z"
+                      />
+                    </svg>
+                    Llamar
+                  </a>
+
+                  <a
+                    href="#contacto"
+                    className="flex items-center justify-center gap-2 bg-[#0e5451] text-white font-semibold py-2 rounded-xl hover:bg-[#0b3f3c] transition text-sm md:text-base"
+                  >
+                    Pedir presupuesto
+                  </a>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </header>
 
 
 
       {/* HERO ANIMADO AJUSTADO */}
-<section
-  id="inicio"
-  className="relative h-[80vh] flex flex-col items-center justify-center overflow-hidden"
->
-  {/* Fondo con slideshow */}
-  <div className="absolute inset-0 z-0">
-    <div className="slideshow">
-      <div className="slide"><img src="/img/proyecto1.jpeg" alt="Portón 1" /></div>
-      <div className="slide"><img src="/img/proyecto2.jpeg" alt="Portón 2" /></div>
-      <div className="slide"><img src="/img/proyecto3.jpeg" alt="Portón 3" /></div>
-      <div className="slide"><img src="/img/proyecto4.jpeg" alt="Portón 4" /></div>
-      <div className="slide"><img src="/img/proyecto5.jpeg" alt="Portón 5" /></div>
-      <div className="slide"><img src="/img/proyecto6.jpeg" alt="Portón 6" /></div>
-    </div>
-    <div className="absolute inset-0 bg-black/40"></div>
-  </div>
-
-  {/* Contenido principal */}
-  <div className="relative z-10 text-center text-white px-4">
-    <img
-      src="/logo.png"
-      alt="Docta Portones"
-      className="mx-auto mb-10 w-72 md:w-96 lg:w-[28rem] drop-shadow-2xl animate-fadeIn"
-    />
-    <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-white/90 drop-shadow-lg">
-      Portones que combinan{" "}
-      <span className="text-[#00c2b8] font-bold">seguridad</span> y{" "}
-      <span className="text-[#00c2b8] font-bold">elegancia</span>.
-    </h1>
-    <p className="mt-2 text-sm md:text-base text-gray-200/90 font-light">
-      Fabricamos portones automáticos y manuales con garantía real.
-    </p>
-  </div>
-</section>
-{/* NUESTROS PRODUCTOS */}
-<section id="productos" className="py-20">
-  <div className="container px-4 mx-auto max-w-7xl">
-    <motion.h2
-      {...fadeIn}
-      className="text-3xl md:text-4xl font-bold text-[#154f54] text-center"
-    >
-      Nuestros productos
-    </motion.h2>
-
-    <motion.p
-      {...fadeIn}
-      className="mt-3 text-gray-600 max-w-3xl mx-auto text-center"
-    >
-      Diseñamos y fabricamos portones corredizos, batientes y levadizos en hierro y chapa plegada.
-      Automatización compatible con las principales marcas.
-    </motion.p>
-
-    <div className="mt-10 grid gap-6 md:grid-cols-4">
-      {[
-        {
-          title: 'Corredizos',
-          icon: <Shield className="text-[#154f54]" />,
-          desc: 'Suaves y silenciosos. Ideales para cocheras amplias.',
-        },
-        {
-          title: 'Batientes',
-          icon: <Wrench className="text-[#154f54]" />,
-          desc: 'Clásicos y resistentes. Apertura hacia adentro o hacia afuera.',
-        },
-        {
-          title: 'Levadizos',
-          icon: <Timer className="text-[#154f54]" />,
-          desc: 'Aprovechan mejor el espacio. Sistema contrapesado y equilibrado.',
-        },
-        {
-          title: '¿Cómo están hechos?',
-          icon: <Star className="text-[#154f54]" />,
-          desc: 'Con materiales reforzados, pintura poliuretánica y motores confiables para máxima durabilidad.',
-        },
-      ].map((c) => (
-        <motion.div
-          key={c.title}
-          {...fadeIn}
-          className="rounded-2xl bg-[#f9fdfd] shadow-md ring-1 ring-gray-100 p-6 transition-all hover:shadow-lg text-center"
-        >
-          <div className="flex items-center justify-center mb-3">
-            <div className="rounded-2xl bg-[#e6f3f4] p-3">{c.icon}</div>
+      <section
+        id="inicio"
+        className="relative h-[80vh] flex flex-col items-center justify-center overflow-hidden"
+      >
+        {/* Fondo con slideshow */}
+        <div className="absolute inset-0 z-0">
+          <div className="slideshow">
+            <div className="slide"><img src="/img/proyecto1.jpeg" alt="Portón 1" /></div>
+            <div className="slide"><img src="/img/proyecto2.jpeg" alt="Portón 2" /></div>
+            <div className="slide"><img src="/img/proyecto3.jpeg" alt="Portón 3" /></div>
+            <div className="slide"><img src="/img/proyecto4.jpeg" alt="Portón 4" /></div>
+            <div className="slide"><img src="/img/proyecto5.jpeg" alt="Portón 5" /></div>
+            <div className="slide"><img src="/img/proyecto6.jpeg" alt="Portón 6" /></div>
           </div>
-          <h3 className="text-lg font-semibold text-gray-800">{c.title}</h3>
-          <p className="mt-3 text-sm text-gray-600">{c.desc}</p>
-          <a
-            href="#contacto"
-            className="mt-4 inline-flex items-center gap-2 text-[#154f54] hover:underline font-medium"
+          <div className="absolute inset-0 bg-black/40"></div>
+        </div>
+
+        {/* Contenido principal */}
+        <div className="relative z-10 text-center text-white px-4 w-full">
+          <img
+            src="/logo.png"
+            alt="Docta Portones"
+            className="mx-auto mb-10 w-72 md:w-96 lg:w-[28rem] drop-shadow-2xl animate-fadeIn"
+          />
+          <div className="absolute top-[70%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-full px-4 text-center">
+            <h1 className="text-lg md:text-2xl lg:text-3xl font-semibold text-gray-200/80 drop-shadow-xl">
+              Portones que combinan <span className="text-[#00c2b8] font-bold">diseño</span>,{" "}
+              <span className="text-[#00c2b8] font-bold">calidad</span>,{" "}
+              <span className="text-[#00c2b8] font-bold">seguridad</span> y facilitan tu día a día.
+            </h1>
+
+            <p className="mt-1 text-[10px] sm:text-[11px] md:text-xs lg:text-sm text-gray-200/80 italic drop-shadow-lg">
+  Todos nuestros productos y motores cuentan con garantía oficial.
+</p>
+          </div>
+        </div>
+      </section>
+      {/* NUESTROS PRODUCTOS */}
+      <section id="productos" className="py-20">
+        <div className="container px-4 mx-auto max-w-7xl">
+          <motion.h2
+            {...fadeIn}
+            className="text-3xl md:text-4xl font-bold text-[#154f54] text-center"
           >
-            Ver opciones <ArrowRight size={16} />
-          </a>
-        </motion.div>
-      ))}
-    </div>
-  </div>
-</section>
+            Nuestros productos
+          </motion.h2>
+
+          <motion.p
+            {...fadeIn}
+            className="mt-3 text-gray-600 max-w-3xl mx-auto text-center"
+          >
+            Diseñamos y fabricamos portones corredizos, batientes y levadizos en hierro y chapa plegada.
+            Automatización compatible con las principales marcas.
+          </motion.p>
+
+          <div className="mt-10 grid gap-6 md:grid-cols-4">
+            {[
+              {
+                title: 'Corredizos',
+                icon: <Shield className="text-[#154f54]" />,
+                desc: 'Suaves y silenciosos. Ideales para cocheras amplias.',
+              },
+              {
+                title: 'Batientes',
+                icon: <Wrench className="text-[#154f54]" />,
+                desc: 'Clásicos y resistentes. Apertura hacia adentro o hacia afuera.',
+              },
+              {
+                title: 'Levadizos',
+                icon: <Timer className="text-[#154f54]" />,
+                desc: 'Aprovechan mejor el espacio. Sistema contrapesado y equilibrado.',
+              },
+              {
+                title: '¿Cómo están hechos?',
+                icon: <Star className="text-[#154f54]" />,
+                desc: 'Con materiales reforzados, pintura poliuretánica y motores confiables para máxima durabilidad.',
+              },
+            ].map((c) => (
+              <motion.div
+                key={c.title}
+                {...fadeIn}
+                className="rounded-2xl bg-[#f9fdfd] shadow-md ring-1 ring-gray-100 p-6 transition-all hover:shadow-lg text-center"
+              >
+                <div className="flex items-center justify-center mb-3">
+                  <div className="rounded-2xl bg-[#e6f3f4] p-3">{c.icon}</div>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-800">{c.title}</h3>
+                <p className="mt-3 text-sm text-gray-600">{c.desc}</p>
+                <a
+                  href="#contacto"
+                  className="mt-4 inline-flex items-center gap-2 text-[#154f54] hover:underline font-medium"
+                >
+                  Ver opciones <ArrowRight size={16} />
+                </a>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* GALERÍA */}
       <section id="galeria" className="py-20">
@@ -374,26 +377,187 @@ export default function App() {
       </section>
 
       {/* CÓMO TRABAJAMOS */}
-      <section id="pasos" className="py-20 bg-white">
-        <div className="container px-4 mx-auto max-w-7xl">
-          <motion.h2 {...fadeIn} className="text-3xl md:text-4xl font-bold text-[#154f54]">Cómo trabajamos</motion.h2>
-          <div className="mt-8 grid gap-6 md:grid-cols-3">
-            {[
-              { step: '1', title: 'Asesoramiento', desc: 'Nos contás tu idea y tomamos medidas.' },
-              { step: '2', title: 'Fabricación', desc: 'Construimos a medida con materiales de primera.' },
-              { step: '3', title: 'Instalación', desc: 'Colocación y prueba. Te dejamos todo funcionando.' }
-            ].map((s) => (
-              <motion.div key={s.step} {...fadeIn} className="rounded-2xl bg-white shadow-md ring-1 ring-gray-100 p-6 hover:shadow-lg transition">
-                <div className="flex items-center gap-3">
-                  <span className="grid h-10 w-10 place-content-center rounded-2xl bg-[#e6f3f4] font-bold text-[#154f54]">{s.step}</span>
-                  <h3 className="text-lg font-semibold text-gray-800">{s.title}</h3>
-                </div>
-                <p className="mt-2 text-sm text-gray-600">{s.desc}</p>
-              </motion.div>
-            ))}
+{/* CÓMO TRABAJAMOS */}
+<section id="pasos" className="py-16 sm:py-20 bg-white scroll-mt-24">
+  <div className="container px-4 mx-auto max-w-7xl">
+    {/* Título + descripción */}
+    <motion.div
+      {...fadeIn}
+      className="max-w-3xl"
+    >
+      <span className="inline-flex items-center gap-2 rounded-full bg-[#e6f3f4] text-[#154f54] px-3 py-1 text-xs font-semibold uppercase tracking-wide">
+        Nuestro proceso
+      </span>
+      <h2 className="mt-3 text-2xl sm:text-3xl md:text-4xl font-bold text-[#154f54]">
+        Cómo trabajamos
+      </h2>
+      <p className="mt-3 text-gray-600 text-sm md:text-base">
+        Te acompañamos en todo el proceso: desde el primer contacto hasta dejar tu portón instalado,
+        automatizado y funcionando al 100%.
+      </p>
+    </motion.div>
+
+    {/* Steps */}
+    <motion.div
+      className="mt-10 grid gap-6 md:gap-8 md:grid-cols-3"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      variants={{
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: { staggerChildren: 0.15, duration: 0.5 }
+        }
+      }}
+    >
+      {/* 1) Asesoramiento */}
+      <motion.div
+        variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
+        whileHover={{ y: -6, boxShadow: "0 18px 35px rgba(0,0,0,0.12)" }}
+        transition={{ type: "spring", stiffness: 160, damping: 18 }}
+        className="relative rounded-2xl bg-white shadow-md ring-1 ring-gray-100 p-6 flex flex-col h-full overflow-hidden"
+      >
+        {/* Badge superior */}
+        <div className="flex items-center gap-3 mb-4">
+          <span className="grid h-10 w-10 place-content-center rounded-2xl bg-[#e6f3f4] font-bold text-[#154f54] text-lg">
+            1
+          </span>
+          <div className="flex flex-col">
+            <h3 className="text-lg font-semibold text-gray-800">Asesoramiento</h3>
+            <span className="text-xs uppercase tracking-wide text-gray-400">
+              Primer contacto
+            </span>
           </div>
         </div>
-      </section>
+
+        {/* Contenido */}
+        <ul className="space-y-2 text-sm text-gray-600 flex-1">
+          <li>
+            <span className="font-semibold text-[#154f54]">A.</span>{" "}
+            Te contactás con nosotros y pedís tu presupuesto.
+          </li>
+          <li>
+            <span className="font-semibold text-[#154f54]">B.</span>{" "}
+            Cotizamos en base a las medidas que nos pasaste.
+          </li>
+          <li>
+            <span className="font-semibold text-[#154f54]">C.</span>{" "}
+            Realizamos una visita a tu domicilio para:
+            <ul className="mt-2 ml-4 space-y-1 list-disc">
+              <li>Corroborar medidas.</li>
+              <li>Relevar cómo haríamos la instalación y prever cualquier detalle.</li>
+              <li>
+                Ajustar el presupuesto con las medidas finales para dar el OK y pasar a la fabricación.
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        {/* Footer mini */}
+        <div className="mt-4 pt-3 border-t border-dashed border-gray-200 text-xs text-gray-500">
+          Ideal para definir bien el proyecto antes de fabricar.
+        </div>
+      </motion.div>
+
+      {/* 2) Fabricación */}
+      <motion.div
+        variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
+        whileHover={{ y: -6, boxShadow: "0 18px 35px rgba(0,0,0,0.12)" }}
+        transition={{ type: "spring", stiffness: 160, damping: 18 }}
+        className="relative rounded-2xl bg-white shadow-md ring-1 ring-gray-100 p-6 flex flex-col h-full overflow-hidden"
+      >
+        <div className="flex items-center gap-3 mb-4">
+          <span className="grid h-10 w-10 place-content-center rounded-2xl bg-[#e6f3f4] font-bold text-[#154f54] text-lg">
+            2
+          </span>
+          <div className="flex flex-col">
+            <h3 className="text-lg font-semibold text-gray-800">Fabricación</h3>
+            <span className="text-xs uppercase tracking-wide text-gray-400">
+              Producción a medida
+            </span>
+          </div>
+        </div>
+
+        <ul className="space-y-2 text-sm text-gray-600 flex-1">
+          <li>
+            <span className="font-semibold text-[#154f54]">A.</span>{" "}
+            Se solicita una seña de aproximadamente el 50% del presupuesto para iniciar la fabricación.
+          </li>
+          <li>
+            <span className="font-semibold text-[#154f54]">B.</span>{" "}
+            Con las medidas de tu portón y la seña abonada se realiza el pedido a fábrica.
+          </li>
+          <li>
+            <span className="font-semibold text-[#154f54]">C.</span>{" "}
+            El área de ingeniería se encarga de los planos y de brindar toda la información al sector de producción.
+          </li>
+          <li>
+            <span className="font-semibold text-[#154f54]">D.</span>{" "}
+            La fabricación demora entre <span className="font-semibold">25 y 30 días</span>.
+          </li>
+        </ul>
+
+        <div className="mt-4 pt-3 border-t border-dashed border-gray-200 text-xs text-gray-500">
+          Todo el proceso se realiza con materiales de primera y control de calidad.
+        </div>
+      </motion.div>
+
+      {/* 3) Instalación */}
+      <motion.div
+        variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
+        whileHover={{ y: -6, boxShadow: "0 18px 35px rgba(0,0,0,0.12)" }}
+        transition={{ type: "spring", stiffness: 160, damping: 18 }}
+        className="relative rounded-2xl bg-white shadow-md ring-1 ring-gray-100 p-6 flex flex-col h-full overflow-hidden"
+      >
+        <div className="flex items-center gap-3 mb-4">
+          <span className="grid h-10 w-10 place-content-center rounded-2xl bg-[#e6f3f4] font-bold text-[#154f54] text-lg">
+            3
+          </span>
+          <div className="flex flex-col">
+            <h3 className="text-lg font-semibold text-gray-800">Instalación</h3>
+            <span className="text-xs uppercase tracking-wide text-gray-400">
+              Puesta en marcha
+            </span>
+          </div>
+        </div>
+
+        <ul className="space-y-2 text-sm text-gray-600 flex-1 ">
+          <li>
+            <span className="font-semibold text-[#154f54]">A.</span>{" "}
+            Con el portón ya fabricado, coordinamos la instalación con el cliente.
+          </li>
+          <li>
+            <span className="font-semibold text-[#154f54]">B.</span>{" "}
+            Comenzamos ubicando el portón a nivel y a plomo.
+          </li>
+          <li>
+            <span className="font-semibold text-[#154f54]">C.</span>{" "}
+            Lo empotramos, le damos apertura y realizamos la puesta a punto manual.
+          </li>
+          <li>
+            <span className="font-semibold text-[#154f54]">D.</span>{" "}
+            Luego automatizamos con el motor correspondiente.
+          </li>
+          <li>
+            <span className="font-semibold text-[#154f54]">E.</span>{" "}
+            El portón queda instalado, automatizado y funcionando. Este proceso se llama{" "}
+            <span className="italic">instalación en seco con apertura y puesta a punto</span> y demora
+            entre <span className="font-semibold">4 y 6 horas</span>. El portón queda{" "}
+            <span className="font-semibold">100% operativo el mismo día</span>.
+          </li>
+        </ul>
+
+        <div className="mt-4 pt-3 border-t border-dashed border-gray-200 text-xs text-gray-500">
+          Te explicamos el uso y quedamos disponibles ante cualquier consulta.
+        </div>
+      </motion.div>
+    </motion.div>
+  </div>
+</section>
+
+
 
       {/* FAQ */}
       <section id="faq" className="py-20">
@@ -401,9 +565,9 @@ export default function App() {
           <motion.h2 {...fadeIn} className="text-3xl md:text-4xl font-bold text-[#154f54] text-center">Preguntas frecuentes</motion.h2>
           <div className="mt-6 grid gap-4">
             {[
-              { q:'¿Hacen envíos e instalación?', a:'Sí, instalamos en la ciudad y alrededores. Consultanos por tu zona.' },
-              { q:'¿Tienen garantía?', a:'Sí, garantía escrita por materiales y mano de obra.' },
-              { q:'¿Puedo automatizar mi portón actual?', a:'En muchos casos sí. Evaluamos tu caso y te asesoramos.' },
+              { q: '¿Hacen envíos e instalación?', a: 'Sí, instalamos en la ciudad y alrededores. Consultanos por tu zona.' },
+              { q: '¿Tienen garantía?', a: 'Sí, garantía escrita por materiales y mano de obra.' },
+              { q: '¿Puedo automatizar mi portón actual?', a: 'En muchos casos sí. Evaluamos tu caso y te asesoramos.' },
             ].map((item, idx) => (
               <motion.details key={idx} {...fadeIn} className="rounded-2xl bg-white shadow-md ring-1 ring-gray-100 p-6">
                 <summary className="cursor-pointer list-none font-semibold text-gray-800">
@@ -417,85 +581,85 @@ export default function App() {
       </section>
 
       <section id="nosotros" className="py-20 bg-white">
-  <div className="container px-4 mx-auto max-w-5xl text-center">
-    <h2 className="text-3xl font-bold text-[#154f54]">Sobre nosotros</h2>
-    <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
-      En Docta Portones nos especializamos en la fabricación e instalación de portones automáticos y manuales.
-      Combinamos más de 10 años de experiencia, materiales de primera calidad y atención personalizada.
-    </p>
-  </div>
-</section>
-
-
-     {/* CONTACTO */}
-<section id="contacto" className="py-24 bg-gradient-to-b from-gray-50 to-white">
-  <div className="container grid gap-12 md:grid-cols-2 px-6 mx-auto max-w-7xl items-start">
-    {/* Texto lateral */}
-    <motion.div {...fadeIn}>
-      <h2 className="text-4xl font-bold text-[#154f54]">Contactanos</h2>
-      <p className="mt-4 text-gray-600 text-lg">
-        Dejanos tu consulta y te responderemos a la brevedad.  
-        También podés escribirnos directamente por WhatsApp para una atención inmediata.
-      </p>
-    </motion.div>
-
-    {/* Formulario */}
-    <motion.div
-      {...fadeIn}
-      className="rounded-2xl bg-white shadow-lg ring-1 ring-gray-200 p-8 hover:shadow-xl transition-shadow"
-    >
-      <form onSubmit={handleSubmit} className="space-y-5">
-        <input
-          name="name"
-          className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none text-gray-700 placeholder:text-gray-400 focus:ring-2 focus:ring-[#154f54]"
-          placeholder="Nombre"
-          required
-        />
-        <input
-          name="email"
-          type="email"
-          className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none text-gray-700 placeholder:text-gray-400 focus:ring-2 focus:ring-[#154f54]"
-          placeholder="Email o teléfono"
-          required
-        />
-        <textarea
-          name="message"
-          className="w-full min-h-[130px] rounded-xl border border-gray-300 px-4 py-3 outline-none text-gray-700 placeholder:text-gray-400 focus:ring-2 focus:ring-[#154f54]"
-          placeholder="Mensaje"
-          required
-        />
-
-        <div className="flex flex-wrap gap-4 justify-end">
-          <a
-            href="https://wa.me/5493518791565"
-            target="_blank"
-            className="flex items-center gap-2 border border-[#154f54] text-[#154f54] px-5 py-3 rounded-xl hover:bg-[#154f54] hover:text-white transition"
-          >
-            <MessageCircle size={18} /> WhatsApp
-          </a>
-          <button
-            type="submit"
-            disabled={sending}
-            className="flex items-center gap-2 bg-[#154f54] text-white px-6 py-3 rounded-xl hover:bg-[#1b676b] transition"
-          >
-            {sending ? "Enviando..." : "Enviar Email"}
-          </button>
+        <div className="container px-4 mx-auto max-w-5xl text-center">
+          <h2 className="text-3xl font-bold text-[#154f54]">Sobre nosotros</h2>
+          <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
+            En Docta Portones nos especializamos en la fabricación e instalación de portones automáticos y manuales.
+            Combinamos más de 10 años de experiencia, materiales de primera calidad y atención personalizada.
+          </p>
         </div>
+      </section>
 
-        {status === "ok" && (
-          <p className="text-green-600 text-sm pt-2">
-            ✅ ¡Mensaje enviado! Te responderemos a la brevedad.
-          </p>
-        )}
-        {status === "error" && (
-          <p className="text-red-600 text-sm pt-2">
-            ❌ Hubo un problema. Probá de nuevo o escribinos por WhatsApp.
-          </p>
-        )}
-      </form>
-    </motion.div>
-  </div>
-</section>
+
+      {/* CONTACTO */}
+      <section id="contacto" className="py-24 bg-gradient-to-b from-gray-50 to-white">
+        <div className="container grid gap-12 md:grid-cols-2 px-6 mx-auto max-w-7xl items-start">
+          {/* Texto lateral */}
+          <motion.div {...fadeIn}>
+            <h2 className="text-4xl font-bold text-[#154f54]">Contactanos</h2>
+            <p className="mt-4 text-gray-600 text-lg">
+              Dejanos tu consulta y te responderemos a la brevedad.
+              También podés escribirnos directamente por WhatsApp para una atención inmediata.
+            </p>
+          </motion.div>
+
+          {/* Formulario */}
+          <motion.div
+            {...fadeIn}
+            className="rounded-2xl bg-white shadow-lg ring-1 ring-gray-200 p-8 hover:shadow-xl transition-shadow"
+          >
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <input
+                name="name"
+                className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none text-gray-700 placeholder:text-gray-400 focus:ring-2 focus:ring-[#154f54]"
+                placeholder="Nombre"
+                required
+              />
+              <input
+                name="email"
+                type="email"
+                className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none text-gray-700 placeholder:text-gray-400 focus:ring-2 focus:ring-[#154f54]"
+                placeholder="Email o teléfono"
+                required
+              />
+              <textarea
+                name="message"
+                className="w-full min-h-[130px] rounded-xl border border-gray-300 px-4 py-3 outline-none text-gray-700 placeholder:text-gray-400 focus:ring-2 focus:ring-[#154f54]"
+                placeholder="Mensaje"
+                required
+              />
+
+              <div className="flex flex-wrap gap-4 justify-end">
+                <a
+                  href="https://wa.me/5493518791565"
+                  target="_blank"
+                  className="flex items-center gap-2 border border-[#154f54] text-[#154f54] px-5 py-3 rounded-xl hover:bg-[#154f54] hover:text-white transition"
+                >
+                  <MessageCircle size={18} /> WhatsApp
+                </a>
+                <button
+                  type="submit"
+                  disabled={sending}
+                  className="flex items-center gap-2 bg-[#154f54] text-white px-6 py-3 rounded-xl hover:bg-[#1b676b] transition"
+                >
+                  {sending ? "Enviando..." : "Enviar Email"}
+                </button>
+              </div>
+
+              {status === "ok" && (
+                <p className="text-green-600 text-sm pt-2">
+                  ✅ ¡Mensaje enviado! Te responderemos a la brevedad.
+                </p>
+              )}
+              {status === "error" && (
+                <p className="text-red-600 text-sm pt-2">
+                  ❌ Hubo un problema. Probá de nuevo o escribinos por WhatsApp.
+                </p>
+              )}
+            </form>
+          </motion.div>
+        </div>
+      </section>
 
       {/* FOOTER */}
       <footer className="border-t border-gray-200 bg-gray-50 py-10">
@@ -522,6 +686,6 @@ export default function App() {
         <MessageCircle />
       </a>
     </div>
-    
+
   )
 }
