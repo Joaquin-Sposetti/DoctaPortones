@@ -279,8 +279,8 @@ export default function App() {
             </h1>
 
             <p className="mt-1 text-[10px] sm:text-[11px] md:text-xs lg:text-sm text-gray-200/80 italic drop-shadow-lg">
-  Todos nuestros productos y motores cuentan con garantía oficial.
-</p>
+              Todos nuestros productos y motores cuentan con garantía oficial.
+            </p>
           </div>
         </div>
       </section>
@@ -377,185 +377,180 @@ export default function App() {
       </section>
 
       {/* CÓMO TRABAJAMOS */}
-{/* CÓMO TRABAJAMOS */}
-<section id="pasos" className="py-16 sm:py-20 bg-white scroll-mt-24">
-  <div className="container px-4 mx-auto max-w-7xl">
-    {/* Título + descripción */}
-    <motion.div
-      {...fadeIn}
-      className="max-w-3xl"
-    >
-      <span className="inline-flex items-center gap-2 rounded-full bg-[#e6f3f4] text-[#154f54] px-3 py-1 text-xs font-semibold uppercase tracking-wide">
-        Nuestro proceso
-      </span>
-      <h2 className="mt-3 text-2xl sm:text-3xl md:text-4xl font-bold text-[#154f54]">
-        Cómo trabajamos
-      </h2>
-      <p className="mt-3 text-gray-600 text-sm md:text-base">
-        Te acompañamos en todo el proceso: desde el primer contacto hasta dejar tu portón instalado,
-        automatizado y funcionando al 100%.
-      </p>
-    </motion.div>
+      {/* CÓMO TRABAJAMOS */}
+      <section id="pasos" className="py-16 sm:py-20 bg-white scroll-mt-24">
+        <div className="container px-4 mx-auto max-w-7xl">
+          {/* Título + descripción */}
+          <motion.div
+            {...fadeIn}
+            className="max-w-3xl"
+          >
 
-    {/* Steps */}
-    <motion.div
-      className="mt-10 grid gap-6 md:gap-8 md:grid-cols-3"
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.2 }}
-      variants={{
-        hidden: { opacity: 0, y: 20 },
-        visible: {
-          opacity: 1,
-          y: 0,
-          transition: { staggerChildren: 0.15, duration: 0.5 }
-        }
-      }}
-    >
-      {/* 1) Asesoramiento */}
-      <motion.div
-        variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
-        whileHover={{ y: -6, boxShadow: "0 18px 35px rgba(0,0,0,0.12)" }}
-        transition={{ type: "spring", stiffness: 160, damping: 18 }}
-        className="relative rounded-2xl bg-white shadow-md ring-1 ring-gray-100 p-6 flex flex-col h-full overflow-hidden"
-      >
-        {/* Badge superior */}
-        <div className="flex items-center gap-3 mb-4">
-          <span className="grid h-10 w-10 place-content-center rounded-2xl bg-[#e6f3f4] font-bold text-[#154f54] text-lg">
-            1
-          </span>
-          <div className="flex flex-col">
-            <h3 className="text-lg font-semibold text-gray-800">Asesoramiento</h3>
-            <span className="text-xs uppercase tracking-wide text-gray-400">
-              Primer contacto
-            </span>
-          </div>
+            <h2 className="mt-3 text-2xl sm:text-3xl md:text-4xl font-bold text-[#154f54]">
+              Cómo trabajamos
+            </h2>
+
+          </motion.div>
+
+          {/* Steps */}
+          <motion.div
+            className="mt-10 grid gap-6 md:gap-8 md:grid-cols-3"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { staggerChildren: 0.15, duration: 0.5 }
+              }
+            }}
+          >
+            {/* 1) Asesoramiento */}
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
+              whileHover={{ y: -6, boxShadow: "0 18px 35px rgba(0,0,0,0.12)" }}
+              transition={{ type: "spring", stiffness: 160, damping: 18 }}
+              className="relative rounded-2xl bg-white shadow-md ring-1 ring-gray-100 p-6 flex flex-col h-full overflow-hidden"
+            >
+              {/* Badge superior */}
+              <div className="flex items-center gap-3 mb-4">
+                <span className="grid h-10 w-10 place-content-center rounded-2xl bg-[#e6f3f4] font-bold text-[#154f54] text-lg">
+                  1
+                </span>
+                <div className="flex flex-col">
+                  <h3 className="text-lg font-semibold text-gray-800">Asesoramiento</h3>
+                  <span className="text-xs uppercase tracking-wide text-gray-400">
+                    Primer contacto
+                  </span>
+                </div>
+              </div>
+
+              {/* Contenido */}
+              <ul className="space-y-2 text-sm text-gray-600 flex-1">
+                <li>
+                  <span className="font-semibold text-[#154f54]">A.</span>{" "}
+                  Te contactás con nosotros y pedís tu presupuesto.
+                </li>
+                <li>
+                  <span className="font-semibold text-[#154f54]">B.</span>{" "}
+                  Cotizamos en base a las medidas que nos pasaste.
+                </li>
+                <li>
+                  <span className="font-semibold text-[#154f54]">C.</span>{" "}
+                  Realizamos una visita a tu domicilio para:
+                  <ul className="mt-2 ml-4 space-y-1 list-disc">
+                    <li>Corroborar medidas.</li>
+                    <li>Relevar cómo haríamos la instalación y prever cualquier detalle.</li>
+                    <li>
+                      Ajustar el presupuesto con las medidas finales para dar el OK y pasar a la fabricación.
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+
+              {/* Footer mini */}
+              <div className="mt-4 pt-3 border-t border-dashed border-gray-200 text-xs text-gray-500">
+                Ideal para definir bien el proyecto antes de fabricar.
+              </div>
+            </motion.div>
+
+            {/* 2) Fabricación */}
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
+              whileHover={{ y: -6, boxShadow: "0 18px 35px rgba(0,0,0,0.12)" }}
+              transition={{ type: "spring", stiffness: 160, damping: 18 }}
+              className="relative rounded-2xl bg-white shadow-md ring-1 ring-gray-100 p-6 flex flex-col h-full overflow-hidden"
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <span className="grid h-10 w-10 place-content-center rounded-2xl bg-[#e6f3f4] font-bold text-[#154f54] text-lg">
+                  2
+                </span>
+                <div className="flex flex-col">
+                  <h3 className="text-lg font-semibold text-gray-800">Fabricación</h3>
+                  <span className="text-xs uppercase tracking-wide text-gray-400">
+                    Producción a medida
+                  </span>
+                </div>
+              </div>
+
+              <ul className="space-y-2 text-sm text-gray-600 flex-1">
+                <li>
+                  <span className="font-semibold text-[#154f54]">A.</span>{" "}
+                  Se solicita una seña de aproximadamente el 50% del presupuesto para iniciar la fabricación.
+                </li>
+                <li>
+                  <span className="font-semibold text-[#154f54]">B.</span>{" "}
+                  Con las medidas de tu portón y la seña abonada se realiza el pedido a fábrica.
+                </li>
+                <li>
+                  <span className="font-semibold text-[#154f54]">C.</span>{" "}
+                  El área de ingeniería se encarga de los planos y de brindar toda la información al sector de producción.
+                </li>
+                <li>
+                  <span className="font-semibold text-[#154f54]">D.</span>{" "}
+                  La fabricación demora entre <span className="font-semibold">25 y 30 días</span>.
+                </li>
+              </ul>
+
+              <div className="mt-4 pt-3 border-t border-dashed border-gray-200 text-xs text-gray-500">
+                Todo el proceso se realiza con materiales de primera y control de calidad.
+              </div>
+            </motion.div>
+
+            {/* 3) Instalación */}
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
+              whileHover={{ y: -6, boxShadow: "0 18px 35px rgba(0,0,0,0.12)" }}
+              transition={{ type: "spring", stiffness: 160, damping: 18 }}
+              className="relative rounded-2xl bg-white shadow-md ring-1 ring-gray-100 p-6 flex flex-col h-full overflow-hidden"
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <span className="grid h-10 w-10 place-content-center rounded-2xl bg-[#e6f3f4] font-bold text-[#154f54] text-lg">
+                  3
+                </span>
+                <div className="flex flex-col">
+                  <h3 className="text-lg font-semibold text-gray-800">Instalación</h3>
+                  <span className="text-xs uppercase tracking-wide text-gray-400">
+                    Puesta en marcha
+                  </span>
+                </div>
+              </div>
+
+              <ul className="space-y-2 text-sm text-gray-600 flex-1 ">
+                <li>
+                  <span className="font-semibold text-[#154f54]">A.</span>{" "}
+                  Con el portón ya fabricado, coordinamos la instalación con el cliente.
+                </li>
+                <li>
+                  <span className="font-semibold text-[#154f54]">B.</span>{" "}
+                  Comenzamos ubicando el portón a nivel y a plomo.
+                </li>
+                <li>
+                  <span className="font-semibold text-[#154f54]">C.</span>{" "}
+                  Lo empotramos, le damos apertura y realizamos la puesta a punto manual.
+                </li>
+                <li>
+                  <span className="font-semibold text-[#154f54]">D.</span>{" "}
+                  Luego automatizamos con el motor correspondiente.
+                </li>
+                <li>
+                  <span className="font-semibold text-[#154f54]">E.</span>{" "}
+                  El portón queda instalado, automatizado y funcionando. Este proceso se llama{" "}
+                  <span className="italic">instalación en seco con apertura y puesta a punto</span> y demora
+                  entre <span className="font-semibold">4 y 6 horas</span>. El portón queda{" "}
+                  <span className="font-semibold">100% operativo el mismo día</span>.
+                </li>
+              </ul>
+
+              <div className="mt-4 pt-3 border-t border-dashed border-gray-200 text-xs text-gray-500">
+                Te explicamos el uso y quedamos disponibles ante cualquier consulta.
+              </div>
+            </motion.div>
+          </motion.div>
         </div>
-
-        {/* Contenido */}
-        <ul className="space-y-2 text-sm text-gray-600 flex-1">
-          <li>
-            <span className="font-semibold text-[#154f54]">A.</span>{" "}
-            Te contactás con nosotros y pedís tu presupuesto.
-          </li>
-          <li>
-            <span className="font-semibold text-[#154f54]">B.</span>{" "}
-            Cotizamos en base a las medidas que nos pasaste.
-          </li>
-          <li>
-            <span className="font-semibold text-[#154f54]">C.</span>{" "}
-            Realizamos una visita a tu domicilio para:
-            <ul className="mt-2 ml-4 space-y-1 list-disc">
-              <li>Corroborar medidas.</li>
-              <li>Relevar cómo haríamos la instalación y prever cualquier detalle.</li>
-              <li>
-                Ajustar el presupuesto con las medidas finales para dar el OK y pasar a la fabricación.
-              </li>
-            </ul>
-          </li>
-        </ul>
-
-        {/* Footer mini */}
-        <div className="mt-4 pt-3 border-t border-dashed border-gray-200 text-xs text-gray-500">
-          Ideal para definir bien el proyecto antes de fabricar.
-        </div>
-      </motion.div>
-
-      {/* 2) Fabricación */}
-      <motion.div
-        variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
-        whileHover={{ y: -6, boxShadow: "0 18px 35px rgba(0,0,0,0.12)" }}
-        transition={{ type: "spring", stiffness: 160, damping: 18 }}
-        className="relative rounded-2xl bg-white shadow-md ring-1 ring-gray-100 p-6 flex flex-col h-full overflow-hidden"
-      >
-        <div className="flex items-center gap-3 mb-4">
-          <span className="grid h-10 w-10 place-content-center rounded-2xl bg-[#e6f3f4] font-bold text-[#154f54] text-lg">
-            2
-          </span>
-          <div className="flex flex-col">
-            <h3 className="text-lg font-semibold text-gray-800">Fabricación</h3>
-            <span className="text-xs uppercase tracking-wide text-gray-400">
-              Producción a medida
-            </span>
-          </div>
-        </div>
-
-        <ul className="space-y-2 text-sm text-gray-600 flex-1">
-          <li>
-            <span className="font-semibold text-[#154f54]">A.</span>{" "}
-            Se solicita una seña de aproximadamente el 50% del presupuesto para iniciar la fabricación.
-          </li>
-          <li>
-            <span className="font-semibold text-[#154f54]">B.</span>{" "}
-            Con las medidas de tu portón y la seña abonada se realiza el pedido a fábrica.
-          </li>
-          <li>
-            <span className="font-semibold text-[#154f54]">C.</span>{" "}
-            El área de ingeniería se encarga de los planos y de brindar toda la información al sector de producción.
-          </li>
-          <li>
-            <span className="font-semibold text-[#154f54]">D.</span>{" "}
-            La fabricación demora entre <span className="font-semibold">25 y 30 días</span>.
-          </li>
-        </ul>
-
-        <div className="mt-4 pt-3 border-t border-dashed border-gray-200 text-xs text-gray-500">
-          Todo el proceso se realiza con materiales de primera y control de calidad.
-        </div>
-      </motion.div>
-
-      {/* 3) Instalación */}
-      <motion.div
-        variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
-        whileHover={{ y: -6, boxShadow: "0 18px 35px rgba(0,0,0,0.12)" }}
-        transition={{ type: "spring", stiffness: 160, damping: 18 }}
-        className="relative rounded-2xl bg-white shadow-md ring-1 ring-gray-100 p-6 flex flex-col h-full overflow-hidden"
-      >
-        <div className="flex items-center gap-3 mb-4">
-          <span className="grid h-10 w-10 place-content-center rounded-2xl bg-[#e6f3f4] font-bold text-[#154f54] text-lg">
-            3
-          </span>
-          <div className="flex flex-col">
-            <h3 className="text-lg font-semibold text-gray-800">Instalación</h3>
-            <span className="text-xs uppercase tracking-wide text-gray-400">
-              Puesta en marcha
-            </span>
-          </div>
-        </div>
-
-        <ul className="space-y-2 text-sm text-gray-600 flex-1 ">
-          <li>
-            <span className="font-semibold text-[#154f54]">A.</span>{" "}
-            Con el portón ya fabricado, coordinamos la instalación con el cliente.
-          </li>
-          <li>
-            <span className="font-semibold text-[#154f54]">B.</span>{" "}
-            Comenzamos ubicando el portón a nivel y a plomo.
-          </li>
-          <li>
-            <span className="font-semibold text-[#154f54]">C.</span>{" "}
-            Lo empotramos, le damos apertura y realizamos la puesta a punto manual.
-          </li>
-          <li>
-            <span className="font-semibold text-[#154f54]">D.</span>{" "}
-            Luego automatizamos con el motor correspondiente.
-          </li>
-          <li>
-            <span className="font-semibold text-[#154f54]">E.</span>{" "}
-            El portón queda instalado, automatizado y funcionando. Este proceso se llama{" "}
-            <span className="italic">instalación en seco con apertura y puesta a punto</span> y demora
-            entre <span className="font-semibold">4 y 6 horas</span>. El portón queda{" "}
-            <span className="font-semibold">100% operativo el mismo día</span>.
-          </li>
-        </ul>
-
-        <div className="mt-4 pt-3 border-t border-dashed border-gray-200 text-xs text-gray-500">
-          Te explicamos el uso y quedamos disponibles ante cualquier consulta.
-        </div>
-      </motion.div>
-    </motion.div>
-  </div>
-</section>
+      </section>
 
 
 
