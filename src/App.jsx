@@ -14,11 +14,20 @@ const WHATSAPP = 'https://wa.me/5493518791565'
 const nav = [
   { id: 'inicio', label: 'Inicio' },
   { id: 'productos', label: 'Productos' },
-  { id: 'galeria', label: 'Galería' },
+  { id: 'Fabricación', label: 'Fabricación' },
   { id: 'pasos', label: 'Proceso' },
   { id: 'faq', label: 'Preguntas' },
   { id: 'nosotros', label: 'Nosotros' }, // 👈 nuevo
   { id: 'contacto', label: 'Contacto' },
+]
+
+const PRODUCT_CARDS = [
+  { title: "Levadizos", img: "/img/cards/levadizos.jpg" },
+  { title: "Corredizos", img: "/img/cards/corredizos.jpg" },
+  { title: "Frentes completos", img: "/img/cards/frentes.jpg" },
+  { title: "Batientes", img: "/img/cards/batientes.jpg" },
+  { title: "Puertas", img: "/img/cards/puertas.jpg" },
+  { title: "Paños fijos", img: "/img/cards/panios.jpg" },
 ]
 
 const fadeIn = {
@@ -26,6 +35,73 @@ const fadeIn = {
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, amount: 0.2 },
   transition: { duration: 0.6 }
+}
+function ProductCard({ c }) {
+  return (
+    <a
+      href="#contacto"
+      className="
+        group relative block overflow-hidden 
+        ring-1 ring-black/10 bg-gray-100
+        shadow-sm hover:shadow-xl transition-all duration-300
+        h-full w-full
+      "
+    >
+      {/* Imagen de fondo - h-full para llenar el contenedor del grid */}
+      <img
+        src={c.img}
+        alt={c.title}
+        className="
+          absolute inset-0 h-full w-full object-cover
+          transition-transform duration-500
+          group-hover:scale-[1.06]
+        "
+        style={{ 
+    imageRendering: '-webkit-optimize-contrast', 
+    backfaceVisibility: 'hidden' 
+  }}
+  loading="eager" // Cambia a eager si quieres que carguen rápido con toda su calidad
+/>
+
+      {/* Overlay: Degradado para legibilidad del texto */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+
+      {/* Recuadro decorativo Docta */}
+      <div
+        className="
+          pointer-events-none absolute inset-4 
+          ring-2 ring-[#00c2b8]
+          transition-all duration-300
+          group-hover:inset-3 group-hover:ring-[#00c2b8]
+        "
+      />
+
+      {/* Contenedor de Texto: h-full y flex items-end para empujar el texto abajo */}
+      <div className="relative z-10 flex h-full w-full items-end p-6">
+        <div className="w-full">
+          <h3
+            className="
+              font-extrabold text-white drop-shadow-lg
+              text-xl md:text-2xl
+              transition-all duration-300
+              group-hover:translate-x-1
+            "
+          >
+            {c.title}
+          </h3>
+
+          {/* Línea decorativa inferior */}
+          <div
+            className="
+              mt-0 h-[2.5px] w-12  bg-[#00c2b8]
+              transition-all duration-300
+              group-hover:w-16
+            "
+          />
+        </div>
+      </div>
+    </a>
+  )
 }
 
 export default function App() {
@@ -134,7 +210,7 @@ export default function App() {
               <a
                 href={WHATSAPP}
                 target="_blank"
-                className="flex items-center justify-center gap-2 border border-[#154f54] text-[#154f54] px-5 py-2.5 rounded-lg hover:bg-[#154f54] hover:text-white transition shadow-sm hover:shadow-md font-medium leading-none"
+                className="flex items-center justify-center gap-2 border border-[#154f54] text-[#154f54] px-5 py-2.5 hover:bg-[#154f54] hover:text-white transition shadow-sm hover:shadow-md font-medium leading-none"
                 style={{ minWidth: "120px", height: "45px" }}
               >
                 <Phone size={18} /> Llamar
@@ -143,7 +219,7 @@ export default function App() {
               {/* Botón Presupuesto */}
               <a
                 href="#contacto"
-                className="flex items-center justify-center gap-2 bg-[#154f54] text-white px-5 py-2.5 rounded-lg hover:bg-[#1b676b] transition shadow-sm hover:shadow-md font-medium leading-none"
+                className="flex items-center justify-center gap-2 bg-[#154f54] text-white px-5 py-2.5 hover:bg-[#1b676b] transition shadow-sm hover:shadow-md font-medium leading-none"
                 style={{ minWidth: "160px", height: "45px" }}
               >
                 Pedir presupuesto <ArrowRight size={16} />
@@ -272,10 +348,10 @@ export default function App() {
             className="mx-auto mb-10 w-72 md:w-96 lg:w-[28rem] drop-shadow-2xl animate-fadeIn"
           />
           <div className="absolute top-[70%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-full px-4 text-center">
-            <h1 className="text-lg md:text-2xl lg:text-3xl font-semibold text-gray-200/80 drop-shadow-xl">
-              Portones que combinan <span className="text-[#00c2b8] font-bold">diseño</span>,{" "}
-              <span className="text-[#00c2b8] font-bold">calidad</span>,{" "}
-              <span className="text-[#00c2b8] font-bold">seguridad</span> y facilitan tu día a día.
+            <h1 className="text-lg md:text-2xl lg:text-3xl  text-white drop-shadow-xl">
+              Productos que combinan <span className="text-white font-bold">diseño</span>{" "}<span> y </span>
+              {" "}
+              <span className="text-white font-bold">seguridad</span>.
             </h1>
 
             <p className="mt-1 text-[10px] sm:text-[11px] md:text-xs lg:text-sm text-gray-200/80 italic drop-shadow-lg">
@@ -284,73 +360,57 @@ export default function App() {
           </div>
         </div>
       </section>
-      {/* NUESTROS PRODUCTOS */}
-      <section id="productos" className="py-20">
-        <div className="container px-4 mx-auto max-w-7xl">
-          <motion.h2
-            {...fadeIn}
-            className="text-3xl md:text-4xl font-bold text-[#154f54] text-center"
-          >
-            Nuestros productos
-          </motion.h2>
+      {/* SECCIÓN PRODUCTOS - DISTRIBUCIÓN PERSONALIZADA */}
+<section id="productos" className="py-20">
+  <div className="container px-4 mx-auto max-w-7xl">
+    <motion.h2
+      {...fadeIn}
+      className="text-3xl md:text-4xl font-bold text-[#154f54] text-center mb-10"
+    >
+      Nuestros productos
+    </motion.h2>
 
-          <motion.p
-            {...fadeIn}
-            className="mt-3 text-gray-600 max-w-3xl mx-auto text-center"
-          >
-            Diseñamos y fabricamos portones corredizos, batientes y levadizos en hierro y chapa plegada.
-            Automatización compatible con las principales marcas.
-          </motion.p>
+    {/* Grid Principal */}
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 auto-rows-[300px]">
+      
+      {/* 1. Alargada hacia abajo (Ocupa 2 filas de alto) */}
+      <div className="md:col-span-1 md:row-span-2">
+        <ProductCard c={PRODUCT_CARDS[0]} size="tall" />
+      </div>
 
-          <div className="mt-10 grid gap-6 md:grid-cols-4">
-            {[
-              {
-                title: 'Corredizos',
-                icon: <Shield className="text-[#154f54]" />,
-                desc: 'Suaves y silenciosos. Ideales para cocheras amplias.',
-              },
-              {
-                title: 'Batientes',
-                icon: <Wrench className="text-[#154f54]" />,
-                desc: 'Clásicos y resistentes. Apertura hacia adentro o hacia afuera.',
-              },
-              {
-                title: 'Levadizos',
-                icon: <Timer className="text-[#154f54]" />,
-                desc: 'Aprovechan mejor el espacio. Sistema contrapesado y equilibrado.',
-              },
-              {
-                title: '¿Cómo están hechos?',
-                icon: <Star className="text-[#154f54]" />,
-                desc: 'Con materiales reforzados, pintura poliuretánica y motores confiables para máxima durabilidad.',
-              },
-            ].map((c) => (
-              <motion.div
-                key={c.title}
-                {...fadeIn}
-                className="rounded-2xl bg-[#f9fdfd] shadow-md ring-1 ring-gray-100 p-6 transition-all hover:shadow-lg text-center"
-              >
-                <div className="flex items-center justify-center mb-3">
-                  <div className="rounded-2xl bg-[#e6f3f4] p-3">{c.icon}</div>
-                </div>
-                <h3 className="text-lg font-semibold text-gray-800">{c.title}</h3>
-                <p className="mt-3 text-sm text-gray-600">{c.desc}</p>
-                <a
-                  href="#contacto"
-                  className="mt-4 inline-flex items-center gap-2 text-[#154f54] hover:underline font-medium"
-                >
-                  Ver opciones <ArrowRight size={16} />
-                </a>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* 2. Cuadrada (Arriba) */}
+      <div className="md:col-span-1 md:row-span-1">
+        <ProductCard c={PRODUCT_CARDS[1]} />
+      </div>
+
+      {/* 3. Más alargada horizontalmente (Arriba a la derecha) */}
+      <div className="md:col-span-2 md:row-span-1">
+        <ProductCard c={PRODUCT_CARDS[2]} />
+      </div>
+
+      {/* 4. Cuadrada (Abajo, al lado de la grande) */}
+      <div className="md:col-span-1 md:row-span-1">
+        <ProductCard c={PRODUCT_CARDS[3]} />
+      </div>
+
+      {/* 5. Otra Cuadrada (Ocupa el espacio restante) */}
+      {/* Si tienes 6 productos, puedes repetir col-span-1 o estirar uno */}
+      <div className="md:col-span-1 md:row-span-1">
+        <ProductCard c={PRODUCT_CARDS[4]} />
+      </div>
+
+      <div className="md:col-span-1 md:row-span-1">
+        <ProductCard c={PRODUCT_CARDS[5]} />
+      </div>
+
+    </div>
+  </div>
+</section>
 
       {/* GALERÍA */}
       <section id="galeria" className="py-20">
         <div className="container px-4 mx-auto max-w-7xl text-center">
-          <motion.h2 {...fadeIn} className="text-3xl md:text-4xl font-bold text-[#154f54]">Galería</motion.h2>
+          <motion.h2 {...fadeIn} className="text-3xl md:text-4xl font-bold text-[#154f54]">Fabricación</motion.h2>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
             {[
               "/img/proyecto1.jpeg",
@@ -376,9 +436,15 @@ export default function App() {
         </div>
       </section>
 
+
       {/* CÓMO TRABAJAMOS */}
-      {/* CÓMO TRABAJAMOS */}
-      <section id="pasos" className="py-16 sm:py-20 bg-white scroll-mt-24">
+      <section id="pasos" className="
+    relative py-16 sm:py-20 scroll-mt-24
+    bg-center bg-cover bg-no-repeat
+  "
+  style={{
+    backgroundImage: "url('/img/bg-como-trabajamos.png')"
+  }}>
         <div className="container px-4 mx-auto max-w-7xl">
           {/* Título + descripción */}
           <motion.div
@@ -665,7 +731,7 @@ export default function App() {
           </div>
           <div className="flex items-center gap-4 text-sm text-gray-600">
             <a href="#productos" className="hover:text-[#154f54]">Productos</a>
-            <a href="#galeria" className="hover:text-[#154f54]">Galería</a>
+            <a href="#Fabricación" className="hover:text-[#154f54]"></a>
             <a href="#contacto" className="hover:text-[#154f54]">Contacto</a>
           </div>
         </div>
