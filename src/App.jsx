@@ -24,7 +24,6 @@ const nav = [
   { id: "pasos", label: "Proceso" },
   { id: "faq", label: "Preguntas" },
   { id: "nosotros", label: "Nosotros" },
-  { id: "contacto", label: "Contacto" },
 ]
 
 const PRODUCT_CARDS = [
@@ -511,7 +510,7 @@ const handlePlayFab = async () => {
 
 {/* FABRICACIÓN (RESPONSIVE + VIDEO CON POSTER/PLAY) */}
 {/* ================= FABRICACIÓN ================= */}
-<section id="galeria" className="py-16 bg-white">
+<section id="fabricación" className="py-16 bg-white">
   <div className="container px-4 mx-auto max-w-7xl">
     <motion.h2
       initial={{ opacity: 0, y: 20 }}
@@ -846,8 +845,6 @@ const handlePlayFab = async () => {
         </div>
       </section>
 
-      {/* CONTACTO */}
-     
 
       {/* FOOTER */}
       <footer className="border-t border-gray-200 bg-gray-50 py-10">
@@ -858,7 +855,6 @@ const handlePlayFab = async () => {
           </div>
           <div className="flex items-center gap-4 text-sm text-gray-600">
             <a href="#productos" className="hover:text-[#154f54]">Productos</a>
-            <a href="#contacto" className="hover:text-[#154f54]">Contacto</a>
           </div>
         </div>
       </footer>
