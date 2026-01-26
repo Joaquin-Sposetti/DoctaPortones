@@ -510,7 +510,7 @@ const handlePlayFab = async () => {
 
 {/* FABRICACIÓN (RESPONSIVE + VIDEO CON POSTER/PLAY) */}
 {/* ================= FABRICACIÓN ================= */}
-<section id="fabricación" className="py-16 bg-white">
+<section id="Fabricación" className="py-16 bg-white">
   <div className="container px-4 mx-auto max-w-7xl">
     <motion.h2
       initial={{ opacity: 0, y: 20 }}
