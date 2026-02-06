@@ -1,21 +1,21 @@
-import React, { useRef, useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import React, { useRef, useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Menu,
   X,
-  ArrowRight,
-  CheckCircle2,
   Phone,
   MessageCircle,
   Instagram,
   Facebook,
   Linkedin,
-} from "lucide-react"
+  CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+  X as CloseIcon,
+} from "lucide-react";
 
-
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000"
-const WHATSAPP = "https://wa.me/5493518791565"
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+const WHATSAPP = "https://wa.me/5493518791565";
 
 const nav = [
   { id: "inicio", label: "Inicio" },
@@ -24,7 +24,7 @@ const nav = [
   { id: "pasos", label: "Proceso" },
   { id: "faq", label: "Preguntas" },
   { id: "nosotros", label: "Nosotros" },
-]
+];
 
 const PRODUCT_CARDS = [
   { title: "Levadizos", img: "/img/cards/levadizos.jpg" },
@@ -33,13 +33,10 @@ const PRODUCT_CARDS = [
   { title: "Batientes", img: "/img/cards/batientes.jpg" },
   { title: "Puertas", img: "/img/cards/puertas.jpg" },
   { title: "Paños fijos", img: "/img/cards/panios.jpg" },
-]
+];
 
-const PRODUCT_TITLES = PRODUCT_CARDS.map((p) => p.title)
+const PRODUCT_TITLES = PRODUCT_CARDS.map((p) => p.title);
 
-/**
- * ⬇️ CAMBIÁ ESTAS RUTAS POR TUS FOTOS REALES (6 por categoría)
- */
 const PRODUCT_GALLERY = {
   Levadizos: [
     "/img/galeria/levadizos/1.jpg",
@@ -89,16 +86,21 @@ const PRODUCT_GALLERY = {
     "/img/galeria/panios/5.jpg",
     "/img/galeria/panios/6.jpg",
   ],
-}
+};
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, amount: 0.2 },
   transition: { duration: 0.6 },
-}
+};
 
 function ProductCard({ c, onSelect }) {
+  const [loaded, setLoaded] = useState(false);
+
+  // Intentamos usar versión -low si existe, sino la original
+  const lowResSrc = c.imgLow || c.img?.replace(/(\.\w+)$/, "-low$1");
+
   return (
     <button
       type="button"
@@ -107,36 +109,56 @@ function ProductCard({ c, onSelect }) {
         group relative block overflow-hidden text-left
         ring-1 ring-black/10 bg-gray-100
         shadow-sm hover:shadow-xl transition-all duration-300
-        h-full w-full
+        h-full w-full aspect-[4/3] md:aspect-auto
       "
     >
+      <div className="absolute inset-0 bg-gray-200" />
+
+      {/* Placeholder de baja resolución */}
+      <img
+        src={lowResSrc}
+        alt=""
+        className={`
+          absolute inset-0 h-full w-full object-cover
+          transition-opacity duration-700 ease-out
+          ${loaded ? "opacity-0" : "opacity-100 blur-sm scale-105"}
+        `}
+        aria-hidden="true"
+      />
+
+      {/* Imagen real */}
       <img
         src={c.img}
         alt={c.title}
-        className="
-          absolute inset-0 h-full w-full object-cover
-          transition-transform duration-500
+        className={`
+          absolute inset-0 z-0 h-full w-full object-cover
+          transition-all duration-700 ease-out
           group-hover:scale-[1.06]
-        "
-        style={{
-          imageRendering: "-webkit-optimize-contrast",
-          backfaceVisibility: "hidden",
-        }}
-        loading="eager"
+          ${loaded ? "opacity-100" : "opacity-0"}
+        `}
+        loading="lazy"
+        decoding="async"
+        onLoad={() => setLoaded(true)}
+        onError={() => setLoaded(true)}
       />
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+      {/* Shimmer mientras no carga */}
+      {!loaded && (
+        <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
+          <div className="absolute inset-0 animate-shimmer" />
+        </div>
+      )}
 
+      <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
       <div
         className="
-          pointer-events-none absolute inset-4
-          ring-2 ring-[#00c2b8]
-          transition-all duration-300
-          group-hover:inset-3 group-hover:ring-[#00c2b8]
+          pointer-events-none absolute inset-4 z-10
+          ring-2 ring-[#00c2b8] transition-all duration-300
+          group-hover:inset-3
         "
       />
 
-      <div className="relative z-10 flex h-full w-full items-end p-6">
+      <div className="relative z-20 flex h-full w-full items-end p-6">
         <div className="w-full">
           <h3
             className="
@@ -148,87 +170,209 @@ function ProductCard({ c, onSelect }) {
           >
             {c.title}
           </h3>
-
-          <div
-            className="
-              mt-0 h-[2.5px] w-12 bg-[#00c2b8]
-              transition-all duration-300
-              group-hover:w-16
-            "
-          />
+          <div className="mt-0 h-[2.5px] w-12 bg-[#00c2b8] transition-all duration-300 group-hover:w-16" />
         </div>
       </div>
     </button>
-  )
+  );
+}
+
+function GalleryImage({ src, alt, onClick }) {
+  const [loaded, setLoaded] = useState(false);
+
+  const lowResSrc = src.replace(/(\.\w+)$/, "-low$1");
+
+  return (
+    <button
+      onClick={onClick}
+      className="
+        relative overflow-hidden bg-gray-200 ring-1 ring-gray-200 
+        shadow-sm hover:shadow-lg transition-all duration-300
+        aspect-[4/3] focus:outline-none
+      "
+    >
+      <img
+        src={lowResSrc}
+        alt=""
+        className={`
+          absolute inset-0 w-full h-full object-cover
+          transition-opacity duration-700
+          ${loaded ? "opacity-0" : "opacity-100 blur-sm scale-[1.02]"}
+        `}
+        aria-hidden="true"
+      />
+
+      <img
+        src={src}
+        alt={alt}
+        className={`
+          absolute inset-0 w-full h-full object-cover
+          transition-all duration-700 ease-out
+          hover:scale-105
+          ${loaded ? "opacity-100" : "opacity-0"}
+        `}
+        loading="lazy"
+        onLoad={() => {
+          setTimeout(() => setLoaded(true), 400);
+        }}
+        onError={() => setLoaded(true)}
+      />
+
+      {!loaded && (
+        <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
+          <div className="absolute inset-0 bg-gray-300/60" />
+          <div className="absolute inset-0 animate-shimmer" />
+        </div>
+      )}
+    </button>
+  );
+}
+
+// Nuevo componente: GalleryModal
+function GalleryModal({ images, initialIndex, onClose }) {
+  const [currentIndex, setCurrentIndex] = useState(initialIndex);
+  const [zoomed, setZoomed] = useState(false);
+
+  const currentImage = images[currentIndex];
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    setZoomed(false);
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    setZoomed(false);
+  };
+
+  const handleImageClick = () => {
+    setZoomed(!zoomed);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "ArrowLeft") handlePrev();
+    if (e.key === "ArrowRight") handleNext();
+    if (e.key === "Escape") onClose();
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+      onClick={onClose}
+    >
+      <motion.div
+        className="relative max-w-[90vw] max-h-[90vh] flex items-center justify-center"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <img
+          src={currentImage}
+          alt="Imagen ampliada"
+          className={`
+            max-w-full max-h-[90vh] object-contain cursor-pointer
+            transition-transform duration-300
+            ${zoomed ? "scale-150" : "scale-100"}
+          `}
+          onClick={handleImageClick}
+        />
+
+        {/* Botones de navegación */}
+        <button
+  onClick={handlePrev}
+  className="
+    absolute left-3 md:left-8 top-1/2 -translate-y-1/2
+    flex items-center justify-center
+    w-14 h-14 md:w-16 md:h-16
+    rounded-full
+    bg-black/50 backdrop-blur-md border border-white/30
+    text-white hover:bg-[#154f54]/80 hover:border-[#00c2b8]/70
+    transition-all duration-300
+    shadow-xl hover:shadow-2xl hover:scale-110
+    focus:outline-none focus:ring-2 focus:ring-[#00c2b8]
+    z-50
+    glow-arrow                     /* ← aquí */
+  "
+  aria-label="Imagen anterior"
+>
+  <ChevronLeft size={32} strokeWidth={3} />
+</button>
+        <button
+          onClick={handleNext}
+          className="
+            absolute right-4 top-1/2 -translate-y-1/2
+            flex items-center justify-center
+            w-14 h-14 md:w-16 md:h-16
+            rounded-full
+            bg-black/50 backdrop-blur-md border border-white/30
+            text-white hover:bg-[#154f54]/80 hover:border-[#00c2b8]/70
+            transition-all duration-300
+            shadow-xl hover:shadow-2xl hover:scale-110
+            focus:outline-none focus:ring-2 focus:ring-[#00c2b8]
+            z-50
+            glow-arrow                     /* ← aquí */
+          "
+          aria-label="Siguiente"
+        >
+          <ChevronRight size={48} />
+        </button>
+
+        {/* Cerrar */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-white hover:text-[#00c2b8] transition"
+          aria-label="Cerrar"
+        >
+          <CloseIcon size={32} />
+        </button>
+      </motion.div>
+    </motion.div>
+  );
 }
 
 export default function App() {
+  const videoRef = useRef(null);
+  const [fabPlaying, setFabPlaying] = useState(false);
 
-  const videoRef = useRef(null)
-const [fabPlaying, setFabPlaying] = useState(false)
+  const handlePlayFab = async () => {
+    try {
+      const v = videoRef.current;
+      if (!v) return;
+      await v.play();
+      setFabPlaying(true);
+    } catch (e) {
+      console.log("No se pudo reproducir el video", e);
+    }
+  };
 
-const handlePlayFab = async () => {
-  try {
-    const v = videoRef.current
-    if (!v) return
-    await v.play()
-    setFabPlaying(true)
-  } catch (e) {
-    console.log("No se pudo reproducir el video", e)
-  }
-}
-  const [playFab, setPlayFab] = useState(false)
-  const [open, setOpen] = useState(false)
-  const [sending, setSending] = useState(false)
-  const [status, setStatus] = useState(null)
-
-  // ✅ SIEMPRE visible con el primero seleccionado por defecto
-  const [activeProduct, setActiveProduct] = useState(PRODUCT_TITLES[0])
+  const [open, setOpen] = useState(false);
+  const [activeProduct, setActiveProduct] = useState(PRODUCT_TITLES[0]);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
   function selectProduct(title) {
-    setActiveProduct(title)
+    setActiveProduct(title);
     requestAnimationFrame(() => {
       document
         .getElementById("producto-galeria")
-        ?.scrollIntoView({ behavior: "smooth", block: "start" })
-    })
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
   }
 
-  async function handleSubmit(e) {
-    e.preventDefault()
-    setSending(true)
-    setStatus(null)
+  const openModal = (index) => {
+    setSelectedImageIndex(index);
+  };
 
-    const form = new FormData(e.currentTarget)
-    const payload = {
-      name: form.get("name"),
-      email: form.get("email"),
-      message: form.get("message"),
-    }
+  const closeModal = () => {
+    setSelectedImageIndex(null);
+  };
 
-    try {
-      const res = await fetch(`${API_URL}/send-email`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      })
-
-      if (!res.ok) throw new Error("Request failed")
-      const data = await res.json()
-
-      if (data.ok) {
-        setStatus("ok")
-        e.target.reset()
-      } else {
-        setStatus("error")
-      }
-    } catch (err) {
-      console.error(err)
-      setStatus("error")
-    } finally {
-      setSending(false)
-    }
-  }
+  const currentImages = PRODUCT_GALLERY[activeProduct] || [];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 text-gray-900">
@@ -248,16 +392,29 @@ const handlePlayFab = async () => {
           </a>
 
           <nav className="hidden md:flex items-center gap-12 ml-10">
-            {nav.map((n) => (
-              <a
-                key={n.id}
-                href={`#${n.id}`}
-                className="text-[15px] font-medium text-gray-600 hover:text-[#154f54] transition-colors"
-              >
-                {n.label}
-              </a>
-            ))}
-          </nav>
+  {nav.map((n) => (
+    <a
+      key={n.id}
+      href={`#${n.id}`}
+      className="
+        text-[15px] font-medium text-gray-600
+        hover:text-[#00c2b8]           /* ← aquí se pone verde al pasar el mouse */
+        transition-colors duration-300
+        relative group
+      "
+    >
+      {n.label}
+      {/* Línea que crece debajo (la que ya te gustaba) */}
+      <span 
+        className="
+          absolute left-0 bottom-[-4px] h-[2px] w-0 
+          bg-[#154f54] transition-all duration-300 
+          group-hover:w-full
+        "
+      />
+    </a>
+  ))}
+</nav>
 
           <div className="hidden md:flex items-center gap-6 ml-8 pl-8 border-l border-gray-200">
             <div className="flex items-center gap-3">
@@ -300,13 +457,11 @@ const handlePlayFab = async () => {
               >
                 <Phone size={18} /> Llamar
               </a>
-
-          
             </div>
           </div>
 
           <button
-            className="md:hidden rounded-xl p-2 hover:bg-gray-100"
+            className="md:hidden p-2 hover:bg-gray-100"
             onClick={() => setOpen(true)}
             aria-label="Abrir menú"
           >
@@ -342,7 +497,7 @@ const handlePlayFab = async () => {
                     <span className="font-bold text-[#154f54]">Menú</span>
                   </div>
                   <button
-                    className="rounded-xl p-2 hover:bg-gray-100"
+                    className="p-2 hover:bg-gray-100"
                     onClick={() => setOpen(false)}
                     aria-label="Cerrar menú"
                   >
@@ -357,7 +512,7 @@ const handlePlayFab = async () => {
                         key={n.id}
                         href={`#${n.id}`}
                         onClick={() => setOpen(false)}
-                        className="rounded-lg px-4 py-3 text-base font-medium hover:bg-gray-100 transition-colors"
+                        className="px-4 py-3 text-base font-medium hover:bg-gray-100 transition-colors"
                       >
                         {n.label}
                       </a>
@@ -368,12 +523,11 @@ const handlePlayFab = async () => {
                 <div className="flex flex-col gap-3 mt-4 w-full px-4">
                   <a
                     href="tel:+5493518791565"
-                    className="flex items-center justify-center gap-2 border border-[#0e5451] text-[#0e5451] font-medium py-2 rounded-xl hover:bg-[#0e5451]/10 transition text-sm md:text-base"
+                    className="flex items-center justify-center gap-2 border border-[#0e5451] text-[#0e5451] font-medium py-2 hover:bg-[#0e5451]/10 transition text-sm md:text-base"
                   >
                     <Phone size={16} />
                     Llamar
                   </a>
-
                 </div>
               </motion.div>
             </motion.div>
@@ -420,10 +574,7 @@ const handlePlayFab = async () => {
       {/* PRODUCTOS */}
       <section id="productos" className="py-20">
         <div className="container px-4 mx-auto max-w-7xl">
-          <motion.h2
-            {...fadeIn}
-            className="text-3xl md:text-4xl font-bold text-[#154f54] text-center mb-10"
-          >
+          <motion.h2 {...fadeIn} className="text-3xl md:text-4xl font-bold text-[#154f54] text-center mb-10">
             Nuestros productos
           </motion.h2>
 
@@ -463,7 +614,7 @@ const handlePlayFab = async () => {
           {/* ✅ BOTONES CENTRADOS Y MÁS CUADRADOS */}
           <div className="flex flex-wrap justify-center gap-3">
             {PRODUCT_TITLES.map((t) => {
-              const active = t === activeProduct
+              const active = t === activeProduct;
               return (
                 <button
                   key={t}
@@ -471,7 +622,6 @@ const handlePlayFab = async () => {
                   onClick={() => setActiveProduct(t)}
                   className={[
                     "px-5 py-3 text-sm font-semibold transition ring-1",
-                    "rounded-xl",
                     "min-w-[140px]",
                     active
                       ? "bg-[#154f54] text-white ring-[#154f54] shadow-sm"
@@ -480,168 +630,169 @@ const handlePlayFab = async () => {
                 >
                   {t}
                 </button>
-              )
+              );
             })}
           </div>
 
           {/* Grid de 6 imágenes */}
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+          <div key={activeProduct} className="mt-10 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
             {(PRODUCT_GALLERY[activeProduct] || []).slice(0, 6).map((src, i) => (
-              <motion.div
-                key={`${activeProduct}-${src}-${i}`}
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.25, delay: i * 0.03 }}
-                className="relative overflow-hidden rounded-2xl ring-1 ring-gray-200 shadow-sm hover:shadow-md transition"
-              >
-                <img
-                  src={src}
-                  alt={`${activeProduct} ${i + 1}`}
-                  className="w-full h-64 object-cover"
-                  loading="lazy"
-                />
-              </motion.div>
+              <GalleryImage
+                key={src}
+                src={src}
+                alt={`${activeProduct} ${i + 1}`}
+                onClick={() => openModal(i)}
+              />
             ))}
           </div>
-
-
         </div>
       </motion.section>
 
-{/* FABRICACIÓN (RESPONSIVE + VIDEO CON POSTER/PLAY) */}
-{/* ================= FABRICACIÓN ================= */}
-<section id="Fabricación" className="py-16 bg-white">
-  <div className="container px-4 mx-auto max-w-7xl">
-    <motion.h2
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
-      className="text-3xl md:text-4xl font-bold text-[#154f54] text-center"
-    >
-      Fabricación
-    </motion.h2>
-
-    <p className="mt-3 text-center text-gray-600 max-w-2xl mx-auto">
-      Mirá parte del proceso real de fabricación y algunos trabajos destacados.
-    </p>
-
-    {/* Layout responsive: mobile apilado | desktop 2 columnas */}
-    <div className="mt-10 grid gap-6 lg:grid-cols-2 lg:items-stretch">
-      {/* ===== VIDEO IZQUIERDA ===== */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="relative overflow-hidden rounded-3xl ring-1 ring-gray-200 shadow-sm hover:shadow-md transition bg-white"
-      >
-        {/* Aspect responsive (NO gigante) */}
-        <div className="relative w-full aspect-[3/4] sm:aspect-[4/5] lg:aspect-[5/6]">
-          {/* Video real */}
-          <video
-            ref={videoRef}
-            className="absolute inset-0 w-full h-full object-cover"
-            src="/video/fabricacion.mp4"
-            poster="/img/fabricacion/poster.jpg"
-            playsInline
-            preload="metadata"
-            controls={fabPlaying}
-            onPlay={() => setFabPlaying(true)}
-            onPause={() => setFabPlaying(false)}
+      {/* Modal de imagen ampliada */}
+      <AnimatePresence>
+        {selectedImageIndex !== null && (
+          <GalleryModal
+            images={currentImages}
+            initialIndex={selectedImageIndex}
+            onClose={closeModal}
           />
+        )}
+      </AnimatePresence>
 
-          {/* Overlay con poster + play (solo si NO está reproduciendo) */}
-          {!fabPlaying && (
-            <div className="absolute inset-0">
-              {/* Oscurecido */}
-              <div className="absolute inset-0 bg-black/35" />
-
-              {/* Botón play */}
-              <button
-                type="button"
-                onClick={handlePlayFab}
-                className="absolute inset-0 grid place-content-center"
-                aria-label="Reproducir video"
-              >
-                <div className="h-16 w-16 rounded-2xl bg-white/90 backdrop-blur shadow-lg grid place-content-center hover:scale-105 transition">
-                  <div className="ml-1 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-l-[16px] border-l-[#154f54]" />
-                </div>
-              </button>
-
-              {/* Texto inferior */}
-              <div className="absolute inset-x-0 bottom-0 p-5 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none">
-                <h3 className="text-white font-bold text-lg">
-                  Proceso de fabricación
-                </h3>
-                <p className="mt-1 text-sm text-white/85">
-                  Corte, armado y terminación con control de calidad.
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
-      </motion.div>
-
-      {/* ===== DERECHA: 2 CARDS APILADAS ===== */}
-      <div className="flex flex-col gap-6">
-        {[
-          {
-            title: "Armado y soldadura",
-            desc: "Estructura reforzada y terminaciones prolijas.",
-            img: "/img/fabricacion/1.jpg",
-          },
-          {
-            title: "Pintura y detalles",
-            desc: "Acabado final para máxima durabilidad.",
-            img: "/img/fabricacion/2.jpg",
-          },
-        ].map((item, i) => (
-          <motion.div
-            key={i}
+      {/* FABRICACIÓN (RESPONSIVE + VIDEO CON POSTER/PLAY) */}
+      {/* ================= FABRICACIÓN ================= */}
+      <section id="Fabricación" className="py-16 bg-white">
+        <div className="container px-4 mx-auto max-w-7xl">
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: i * 0.1 }}
-            className="
-              group relative overflow-hidden rounded-3xl
-              ring-1 ring-gray-200 shadow-sm hover:shadow-md transition
-              min-h-[220px] sm:min-h-[240px]
-              lg:flex-1
-            "
+            transition={{ duration: 0.6 }}
+            className="text-3xl md:text-4xl font-bold text-[#154f54] text-center"
           >
-            {/* Imagen full */}
-            <img
-              src={item.img}
-              alt={item.title}
-              className="
-                absolute inset-0 w-full h-full object-cover
-                transition-transform duration-500
-                group-hover:scale-[1.04]
-              "
-              loading="lazy"
-            />
+            Fabricación
+          </motion.h2>
 
-            {/* Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent" />
+          <p className="mt-3 text-center text-gray-600 max-w-2xl mx-auto">
+            Mirá parte del proceso real de fabricación y algunos trabajos destacados.
+          </p>
 
-            {/* Texto */}
-            <div className="absolute inset-x-0 bottom-0 p-6">
-              <h3 className="text-white font-extrabold text-xl drop-shadow">
-                {item.title}
-              </h3>
-              <p className="mt-1 text-white/85 text-sm drop-shadow">
-                {item.desc}
-              </p>
-              <div className="mt-3 h-[2.5px] w-12 bg-[#00c2b8] transition-all duration-300 group-hover:w-16" />
+          {/* Layout responsive: mobile apilado | desktop 2 columnas */}
+          <div className="mt-10 grid gap-6 lg:grid-cols-2 lg:items-stretch">
+            {/* ===== VIDEO IZQUIERDA ===== */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="relative overflow-hidden ring-1 ring-gray-200 shadow-sm hover:shadow-md transition bg-white"
+            >
+              {/* Aspect responsive (NO gigante) */}
+              <div className="relative w-full aspect-[3/4] sm:aspect-[4/5] lg:aspect-[5/6]">
+                {/* Video real */}
+                <video
+                  ref={videoRef}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  src="/video/fabricacion.mp4"
+                  poster="/img/fabricacion/poster.jpg"
+                  playsInline
+                  preload="metadata"
+                  controls={fabPlaying}
+                  onPlay={() => setFabPlaying(true)}
+                  onPause={() => setFabPlaying(false)}
+                />
+
+                {/* Overlay con poster + play (solo si NO está reproduciendo) */}
+                {!fabPlaying && (
+                  <div className="absolute inset-0">
+                    {/* Oscurecido */}
+                    <div className="absolute inset-0 bg-black/35" />
+
+                    {/* Botón play */}
+                    <button
+                      type="button"
+                      onClick={handlePlayFab}
+                      className="absolute inset-0 grid place-content-center"
+                      aria-label="Reproducir video"
+                    >
+                      <div className="h-16 w-16 bg-white/90 backdrop-blur shadow-lg grid place-content-center hover:scale-105 transition">
+                        <div className="ml-1 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-l-[16px] border-l-[#154f54]" />
+                      </div>
+                    </button>
+
+                    {/* Texto inferior */}
+                    <div className="absolute inset-x-0 bottom-0 p-5 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none">
+                      <h3 className="text-white font-bold text-lg">
+                        Proceso de fabricación
+                      </h3>
+                      <p className="mt-1 text-sm text-white/85">
+                        Corte, armado y terminación con control de calidad.
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+
+            {/* ===== DERECHA: 2 CARDS APILADAS ===== */}
+            <div className="flex flex-col gap-6">
+              {[
+                {
+                  title: "Armado y soldadura",
+                  desc: "Estructura reforzada y terminaciones prolijas.",
+                  img: "/img/fabricacion/1.jpg",
+                },
+                {
+                  title: "Pintura y detalles",
+                  desc: "Acabado final para máxima durabilidad.",
+                  img: "/img/fabricacion/2.jpg",
+                },
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  className="
+                    group relative overflow-hidden
+                    ring-1 ring-gray-200 shadow-sm hover:shadow-md transition
+                    min-h-[220px] sm:min-h-[240px]
+                    lg:flex-1
+                  "
+                >
+                  {/* Imagen full */}
+                  <img
+                    src={item.img}
+                    alt={item.title}
+                    className="
+                      absolute inset-0 w-full h-full object-cover
+                      transition-transform duration-500
+                      group-hover:scale-[1.04]
+                    "
+                    loading="lazy"
+                  />
+
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent" />
+
+                  {/* Texto */}
+                  <div className="absolute inset-x-0 bottom-0 p-6">
+                    <h3 className="text-white font-extrabold text-xl drop-shadow">
+                      {item.title}
+                    </h3>
+                    <p className="mt-1 text-white/85 text-sm drop-shadow">
+                      {item.desc}
+                    </p>
+                    <div className="mt-3 h-[2.5px] w-12 bg-[#00c2b8] transition-all duration-300 group-hover:w-16" />
+                  </div>
+                </motion.div>
+              ))}
             </div>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  </div>
-</section>
-{/* ================= FIN FABRICACIÓN ================= */}
+          </div>
+        </div>
+      </section>
+      {/* ================= FIN FABRICACIÓN ================= */}
 
 
 
@@ -677,10 +828,10 @@ const handlePlayFab = async () => {
               variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
               whileHover={{ y: -6, boxShadow: "0 18px 35px rgba(0,0,0,0.12)" }}
               transition={{ type: "spring", stiffness: 160, damping: 18 }}
-              className="relative rounded-2xl bg-white shadow-md ring-1 ring-gray-100 p-6 flex flex-col h-full overflow-hidden"
+              className="relative bg-white shadow-md ring-1 ring-gray-100 p-6 flex flex-col h-full overflow-hidden"
             >
               <div className="flex items-center gap-3 mb-4">
-                <span className="grid h-10 w-10 place-content-center rounded-2xl bg-[#e6f3f4] font-bold text-[#154f54] text-lg">
+                <span className="grid h-10 w-10 place-content-center bg-[#e6f3f4] font-bold text-[#154f54] text-lg">
                   1
                 </span>
                 <div className="flex flex-col">
@@ -718,10 +869,10 @@ const handlePlayFab = async () => {
               variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
               whileHover={{ y: -6, boxShadow: "0 18px 35px rgba(0,0,0,0.12)" }}
               transition={{ type: "spring", stiffness: 160, damping: 18 }}
-              className="relative rounded-2xl bg-white shadow-md ring-1 ring-gray-100 p-6 flex flex-col h-full overflow-hidden"
+              className="relative bg-white shadow-md ring-1 ring-gray-100 p-6 flex flex-col h-full overflow-hidden"
             >
               <div className="flex items-center gap-3 mb-4">
-                <span className="grid h-10 w-10 place-content-center rounded-2xl bg-[#e6f3f4] font-bold text-[#154f54] text-lg">
+                <span className="grid h-10 w-10 place-content-center bg-[#e6f3f4] font-bold text-[#154f54] text-lg">
                   2
                 </span>
                 <div className="flex flex-col">
@@ -759,10 +910,10 @@ const handlePlayFab = async () => {
               variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
               whileHover={{ y: -6, boxShadow: "0 18px 35px rgba(0,0,0,0.12)" }}
               transition={{ type: "spring", stiffness: 160, damping: 18 }}
-              className="relative rounded-2xl bg-white shadow-md ring-1 ring-gray-100 p-6 flex flex-col h-full overflow-hidden"
+              className="relative bg-white shadow-md ring-1 ring-gray-100 p-6 flex flex-col h-full overflow-hidden"
             >
               <div className="flex items-center gap-3 mb-4">
-                <span className="grid h-10 w-10 place-content-center rounded-2xl bg-[#e6f3f4] font-bold text-[#154f54] text-lg">
+                <span className="grid h-10 w-10 place-content-center bg-[#e6f3f4] font-bold text-[#154f54] text-lg">
                   3
                 </span>
                 <div className="flex flex-col">
@@ -820,7 +971,7 @@ const handlePlayFab = async () => {
               <motion.details
                 key={idx}
                 {...fadeIn}
-                className="rounded-2xl bg-white shadow-md ring-1 ring-gray-100 p-6"
+                className=" bg-white shadow-md ring-1 ring-gray-100 p-6"
               >
                 <summary className="cursor-pointer list-none font-semibold text-gray-800">
                   <span className="inline-flex items-center gap-2 text-[#154f54]">
@@ -864,11 +1015,11 @@ const handlePlayFab = async () => {
         href={WHATSAPP}
         target="_blank"
         rel="noreferrer"
-        className="fixed bottom-6 right-6 grid h-12 w-12 place-content-center rounded-full bg-[#154f54] text-white shadow-lg hover:scale-105 transition-transform"
+        className="fixed bottom-6 right-6 grid h-12 w-12 place-content-center bg-[#154f54] text-white shadow-lg hover:scale-105 transition-transform"
         aria-label="WhatsApp"
       >
         <MessageCircle />
       </a>
     </div>
-  )
+  );
 }
