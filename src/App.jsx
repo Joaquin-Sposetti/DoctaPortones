@@ -997,18 +997,135 @@ export default function App() {
       </section>
 
 
-      {/* FOOTER */}
-      <footer className="border-t border-gray-200 bg-gray-50 py-10">
-        <div className="container flex flex-col md:flex-row items-center justify-between gap-4 px-4 mx-auto max-w-7xl">
+      {/* FOOTER (estilo como la captura) */}
+<footer className="mt-10">
+  {/* bloque oscuro */}
+  <div className="bg-gradient-to-b from-[#3a3f45] to-[#2b2f35] text-white">
+    <div className="container mx-auto max-w-7xl px-6 py-14">
+      <div className="grid gap-12 md:grid-cols-3">
+        {/* Col 1: Logo + descripción */}
+        <div>
           <div className="flex items-center gap-3">
-            <img src="/logo.png" className="h-8" alt="Docta Portones" />
-            <span className="text-sm text-gray-500">© {new Date().getFullYear()} Docta Portones</span>
+            <img
+  src="/logo.png"
+  alt="Docta Portones"
+  className="h-14 sm:h-16 md:h-20 w-auto drop-shadow-[0_10px_25px_rgba(0,0,0,0.35)]"
+  style={{ minWidth: "150px" }}
+/>
           </div>
-          <div className="flex items-center gap-4 text-sm text-gray-600">
-            <a href="#productos" className="hover:text-[#154f54]">Productos</a>
+
+          <p className="mt-5 text-sm leading-relaxed text-white/75 max-w-sm">
+            Fabricación e instalación de portones automáticos y manuales.
+            Productos que combinan diseño, seguridad y terminaciones de calidad.
+          </p>
+        </div>
+
+        {/* Col 2: Links */}
+        <div>
+          <h4 className="text-sm font-extrabold tracking-wide uppercase">
+            Links de interés
+          </h4>
+
+          <ul className="mt-5 space-y-3 text-sm">
+            {[
+              { id: "inicio", label: "Inicio" },
+              { id: "productos", label: "Productos" },
+              { id: "Fabricación", label: "Fabricación" },
+              { id: "pasos", label: "Proceso" },
+              { id: "faq", label: "Preguntas frecuentes" },
+              { id: "nosotros", label: "Nosotros" },
+            ].map((l) => (
+              <li key={l.id}>
+                <a
+                  href={`#${l.id}`}
+                  className="group inline-flex items-center gap-3 text-white/80 hover:text-white transition"
+                >
+                  {/* iconito tipo “flecha” como la captura */}
+                  <span className="grid h-6 w-6 place-content-center rounded-full bg-white/10 ring-1 ring-white/15 group-hover:bg-[#154f54]/60 group-hover:ring-[#00c2b8]/60 transition">
+                    <span className="text-[#00c2b8] group-hover:text-white transition">
+                      ›
+                    </span>
+                  </span>
+                  {l.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Col 3: Contacto */}
+        <div>
+          <h4 className="text-sm font-extrabold tracking-wide uppercase">
+            Información de contacto
+          </h4>
+
+          <div className="mt-5 space-y-4 text-sm text-white/75">
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 text-[#00c2b8]">☎</span>
+              <a className="hover:text-white transition" href="tel:+5493518791565">
+                +54 9 351 879 1565
+              </a>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 text-[#00c2b8]">📍</span>
+              <div>
+                <div className="font-semibold text-white/90">Córdoba, Argentina</div>
+                <div className="text-white/70">Instalaciones en ciudad y alrededores</div>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 text-[#00c2b8]">✉</span>
+              <a
+                className="hover:text-white transition"
+                href="mailto:doctaportones@gmail.com"
+              >
+                doctaportones@gmail.com
+              </a>
+            </div>
+          </div>
+
+          {/* redes */}
+          <div className="mt-6 flex items-center gap-4">
+            <a
+              href="https://www.instagram.com/docta.portones/"
+              target="_blank"
+              rel="noreferrer"
+              className="text-white/70 hover:text-white transition"
+              aria-label="Instagram"
+            >
+              <Instagram size={18} />
+            </a>
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noreferrer"
+              className="text-white/70 hover:text-white transition"
+              aria-label="Facebook"
+            >
+              <Facebook size={18} />
+            </a>
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noreferrer"
+              className="text-white/70 hover:text-white transition"
+              aria-label="LinkedIn"
+            >
+              <Linkedin size={18} />
+            </a>
           </div>
         </div>
-      </footer>
+      </div>
+
+      {/* línea + copyright centrado */}
+      <div className="mt-12 pt-8 border-t border-white/10 text-center text-xs text-white/60">
+        © {new Date().getFullYear()} Docta Portones — Todos los derechos reservados.
+      </div>
+    </div>
+  </div>
+</footer>
 
       {/* BOTÓN WHATSAPP */}
       <a
