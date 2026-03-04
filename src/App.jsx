@@ -97,8 +97,6 @@ const fadeIn = {
 
 function ProductCard({ c, onSelect }) {
   const [loaded, setLoaded] = useState(false);
-
-  // Intentamos usar versión -low si existe, sino la original
   const lowResSrc = c.imgLow || c.img?.replace(/(\.\w+)$/, "-low$1");
 
   return (
@@ -110,28 +108,27 @@ function ProductCard({ c, onSelect }) {
         ring-1 ring-black/10 bg-gray-100
         shadow-sm hover:shadow-xl transition-all duration-300
         h-full w-full aspect-[4/3] md:aspect-auto
+        rounded-lg
       "
     >
-      <div className="absolute inset-0 bg-gray-200" />
+      <div className="absolute inset-0 bg-gray-200 rounded-lg" />
 
-      {/* Placeholder de baja resolución */}
       <img
         src={lowResSrc}
         alt=""
         className={`
-          absolute inset-0 h-full w-full object-cover
+          absolute inset-0 h-full w-full object-cover rounded-lg
           transition-opacity duration-700 ease-out
           ${loaded ? "opacity-0" : "opacity-100 blur-sm scale-105"}
         `}
         aria-hidden="true"
       />
 
-      {/* Imagen real */}
       <img
         src={c.img}
         alt={c.title}
         className={`
-          absolute inset-0 z-0 h-full w-full object-cover
+          absolute inset-0 z-0 h-full w-full object-cover rounded-lg
           transition-all duration-700 ease-out
           group-hover:scale-[1.06]
           ${loaded ? "opacity-100" : "opacity-0"}
@@ -142,35 +139,34 @@ function ProductCard({ c, onSelect }) {
         onError={() => setLoaded(true)}
       />
 
-      {/* Shimmer mientras no carga */}
       {!loaded && (
-        <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
+        <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden rounded-lg">
           <div className="absolute inset-0 animate-shimmer" />
         </div>
       )}
 
-      <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+      <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent rounded-lg" />
       <div
         className="
           pointer-events-none absolute inset-4 z-10
           ring-2 ring-[#00c2b8] transition-all duration-300
-          group-hover:inset-3
+          group-hover:inset-3 rounded-sm
         "
       />
 
-      <div className="relative z-20 flex h-full w-full items-end p-6">
+      <div className="relative z-20 flex h-full w-full items-end p-5 sm:p-6">
         <div className="w-full">
           <h3
             className="
               font-extrabold text-white drop-shadow-lg
-              text-xl md:text-2xl
+              text-lg sm:text-xl md:text-2xl
               transition-all duration-300
               group-hover:translate-x-1
             "
           >
             {c.title}
           </h3>
-          <div className="mt-0 h-[2.5px] w-12 bg-[#00c2b8] transition-all duration-300 group-hover:w-16" />
+          <div className="mt-1 h-[2.5px] w-10 bg-[#00c2b8] transition-all duration-300 group-hover:w-14" />
         </div>
       </div>
     </button>
@@ -179,23 +175,22 @@ function ProductCard({ c, onSelect }) {
 
 function GalleryImage({ src, alt, onClick }) {
   const [loaded, setLoaded] = useState(false);
-
   const lowResSrc = src.replace(/(\.\w+)$/, "-low$1");
 
   return (
     <button
       onClick={onClick}
       className="
-        relative overflow-hidden bg-gray-200 ring-1 ring-gray-200 
+        relative overflow-hidden bg-gray-200 ring-1 ring-gray-200
         shadow-sm hover:shadow-lg transition-all duration-300
-        aspect-[4/3] focus:outline-none
+        aspect-[4/3] focus:outline-none rounded-lg
       "
     >
       <img
         src={lowResSrc}
         alt=""
         className={`
-          absolute inset-0 w-full h-full object-cover
+          absolute inset-0 w-full h-full object-cover rounded-lg
           transition-opacity duration-700
           ${loaded ? "opacity-0" : "opacity-100 blur-sm scale-[1.02]"}
         `}
@@ -206,20 +201,18 @@ function GalleryImage({ src, alt, onClick }) {
         src={src}
         alt={alt}
         className={`
-          absolute inset-0 w-full h-full object-cover
+          absolute inset-0 w-full h-full object-cover rounded-lg
           transition-all duration-700 ease-out
           hover:scale-105
           ${loaded ? "opacity-100" : "opacity-0"}
         `}
         loading="lazy"
-        onLoad={() => {
-          setTimeout(() => setLoaded(true), 400);
-        }}
+        onLoad={() => setTimeout(() => setLoaded(true), 400)}
         onError={() => setLoaded(true)}
       />
 
       {!loaded && (
-        <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
+        <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden rounded-lg">
           <div className="absolute inset-0 bg-gray-300/60" />
           <div className="absolute inset-0 animate-shimmer" />
         </div>
@@ -571,48 +564,52 @@ export default function App() {
         </div>
       </section>
 
-      {/* PRODUCTOS */}
-      <section id="productos" className="py-20">
-        <div className="container px-4 mx-auto max-w-7xl">
-          <motion.h2 {...fadeIn} className="text-3xl md:text-4xl font-bold text-[#154f54] text-center mb-10">
+      {/* ===== PRODUCTOS ===== */}
+      <section id="productos" className="py-14 sm:py-20">
+        <div className="container px-4 sm:px-6 mx-auto max-w-7xl">
+          <motion.h2 {...fadeIn} className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#154f54] text-center mb-3">
             Nuestros productos
           </motion.h2>
+          <motion.p {...fadeIn} className="text-center text-gray-500 text-sm mb-10 max-w-xl mx-auto">
+            Fabricamos a medida con materiales de primera calidad.
+          </motion.p>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 auto-rows-[300px]">
-            <div className="md:col-span-1 md:row-span-2">
+          {/* Mobile: grid 2 columnas / Desktop: bento grid */}
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4 md:auto-rows-[300px]">
+            <div className="col-span-2 md:col-span-1 md:row-span-2 min-h-[200px] rounded-xl">
               <ProductCard c={PRODUCT_CARDS[0]} onSelect={selectProduct} />
             </div>
-            <div className="md:col-span-1 md:row-span-1">
+            <div className="col-span-1 min-h-[160px] md:min-h-0 md:col-span-1 md:row-span-1 ">
               <ProductCard c={PRODUCT_CARDS[1]} onSelect={selectProduct} />
             </div>
-            <div className="md:col-span-2 md:row-span-1">
+            <div className="col-span-1 min-h-[160px] md:min-h-0 md:col-span-2 md:row-span-1">
               <ProductCard c={PRODUCT_CARDS[2]} onSelect={selectProduct} />
             </div>
-            <div className="md:col-span-1 md:row-span-1">
+            <div className="col-span-1 min-h-[160px] md:min-h-0 md:col-span-1 md:row-span-1">
               <ProductCard c={PRODUCT_CARDS[3]} onSelect={selectProduct} />
             </div>
-            <div className="md:col-span-1 md:row-span-1">
+            <div className="col-span-1 min-h-[160px] md:min-h-0 md:col-span-1 md:row-span-1">
               <ProductCard c={PRODUCT_CARDS[4]} onSelect={selectProduct} />
             </div>
-            <div className="md:col-span-1 md:row-span-1">
+            <div className="col-span-2 md:col-span-1 md:row-span-1 min-h-[160px]">
               <ProductCard c={PRODUCT_CARDS[5]} onSelect={selectProduct} />
             </div>
           </div>
         </div>
       </section>
 
-      {/* ✅ SECCIÓN SIEMPRE VISIBLE */}
+      {/* ===== GALERÍA ===== */}
       <motion.section
         id="producto-galeria"
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.35 }}
-        className="py-16 bg-white border-t border-gray-100"
+        className="py-12 sm:py-16 bg-white border-t border-gray-100"
       >
-        <div className="container px-4 mx-auto max-w-7xl">
-          {/* ✅ BOTONES CENTRADOS Y MÁS CUADRADOS */}
-          <div className="flex flex-wrap justify-center gap-3">
+        <div className="container px-4 sm:px-6 mx-auto max-w-7xl">
+          {/* Tabs — scroll horizontal en mobile */}
+          <div className="flex gap-2 overflow-x-auto pb-2 sm:flex-wrap sm:justify-center sm:overflow-visible hide-scrollbar">
             {PRODUCT_TITLES.map((t) => {
               const active = t === activeProduct;
               return (
@@ -621,11 +618,10 @@ export default function App() {
                   type="button"
                   onClick={() => setActiveProduct(t)}
                   className={[
-                    "px-5 py-3 text-sm font-semibold transition ring-1",
-                    "min-w-[140px]",
+                    "px-4 py-2.5 text-sm font-semibold transition ring-1 whitespace-nowrap rounded-md flex-shrink-0",
                     active
                       ? "bg-[#154f54] text-white ring-[#154f54] shadow-sm"
-                      : "bg-white text-gray-700 ring-gray-200 hover:ring-gray-300 hover:bg-gray-50",
+                      : "bg-white text-gray-700 ring-gray-200 hover:ring-[#154f54]/40 hover:bg-gray-50",
                   ].join(" ")}
                 >
                   {t}
@@ -634,8 +630,7 @@ export default function App() {
             })}
           </div>
 
-          {/* Grid de 6 imágenes */}
-          <div key={activeProduct} className="mt-10 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+          <div key={activeProduct} className="mt-6 sm:mt-10 grid gap-3 sm:gap-4 grid-cols-2 sm:grid-cols-2 md:grid-cols-3">
             {(PRODUCT_GALLERY[activeProduct] || []).slice(0, 6).map((src, i) => (
               <GalleryImage
                 key={src}
@@ -648,7 +643,7 @@ export default function App() {
         </div>
       </motion.section>
 
-      {/* Modal de imagen ampliada */}
+      {/* Modal galería */}
       <AnimatePresence>
         {selectedImageIndex !== null && (
           <GalleryModal
@@ -659,40 +654,36 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* FABRICACIÓN (RESPONSIVE + VIDEO CON POSTER/PLAY) */}
-      {/* ================= FABRICACIÓN ================= */}
-      <section id="Fabricación" className="py-16 bg-white">
-        <div className="container px-4 mx-auto max-w-7xl">
+      {/* ===== FABRICACIÓN ===== */}
+      <section id="Fabricación" className="py-12 sm:py-16 bg-gray-50">
+        <div className="container px-4 sm:px-6 mx-auto max-w-7xl">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-3xl md:text-4xl font-bold text-[#154f54] text-center"
+            className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#154f54] text-center"
           >
             Fabricación
           </motion.h2>
 
-          <p className="mt-3 text-center text-gray-600 max-w-2xl mx-auto">
+          <p className="mt-3 text-center text-gray-500 max-w-2xl mx-auto text-sm sm:text-base">
             Mirá parte del proceso real de fabricación y algunos trabajos destacados.
           </p>
 
-          {/* Layout responsive: mobile apilado | desktop 2 columnas */}
-          <div className="mt-10 grid gap-6 lg:grid-cols-2 lg:items-stretch">
-            {/* ===== VIDEO IZQUIERDA ===== */}
+          <div className="mt-8 sm:mt-10 grid gap-4 sm:gap-6 lg:grid-cols-2 lg:items-stretch">
+            {/* VIDEO */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="relative overflow-hidden ring-1 ring-gray-200 shadow-sm hover:shadow-md transition bg-white"
+              className="relative overflow-hidden ring-1 ring-gray-200 shadow-sm hover:shadow-md transition bg-white rounded-xl"
             >
-              {/* Aspect responsive (NO gigante) */}
               <div className="relative w-full aspect-[3/4] sm:aspect-[4/5] lg:aspect-[5/6]">
-                {/* Video real */}
                 <video
                   ref={videoRef}
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full object-cover rounded-xl"
                   src="/video/fabricacion.mp4"
                   poster="/img/fabricacion/poster.jpg"
                   playsInline
@@ -702,51 +693,33 @@ export default function App() {
                   onPause={() => setFabPlaying(false)}
                 />
 
-                {/* Overlay con poster + play (solo si NO está reproduciendo) */}
                 {!fabPlaying && (
-                  <div className="absolute inset-0">
-                    {/* Oscurecido */}
-                    <div className="absolute inset-0 bg-black/35" />
-
-                    {/* Botón play */}
+                  <div className="absolute inset-0 rounded-xl">
+                    <div className="absolute inset-0 bg-black/35 rounded-xl" />
                     <button
                       type="button"
                       onClick={handlePlayFab}
                       className="absolute inset-0 grid place-content-center"
                       aria-label="Reproducir video"
                     >
-                      <div className="h-16 w-16 bg-white/90 backdrop-blur shadow-lg grid place-content-center hover:scale-105 transition">
+                      <div className="h-16 w-16 bg-white/90 backdrop-blur shadow-lg grid place-content-center rounded-full hover:scale-105 transition">
                         <div className="ml-1 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-l-[16px] border-l-[#154f54]" />
                       </div>
                     </button>
-
-                    {/* Texto inferior */}
-                    <div className="absolute inset-x-0 bottom-0 p-5 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none">
-                      <h3 className="text-white font-bold text-lg">
-                        Proceso de fabricación
-                      </h3>
-                      <p className="mt-1 text-sm text-white/85">
-                        Corte, armado y terminación con control de calidad.
-                      </p>
+                    <div className="absolute inset-x-0 bottom-0 p-5 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none rounded-b-xl">
+                      <h3 className="text-white font-bold text-base sm:text-lg">Proceso de fabricación</h3>
+                      <p className="mt-1 text-sm text-white/85">Corte, armado y terminación con control de calidad.</p>
                     </div>
                   </div>
                 )}
               </div>
             </motion.div>
 
-            {/* ===== DERECHA: 2 CARDS APILADAS ===== */}
-            <div className="flex flex-col gap-6">
+            {/* 2 cards */}
+            <div className="flex flex-col gap-4 sm:gap-6">
               {[
-                {
-                  title: "Armado y soldadura",
-                  desc: "Estructura reforzada y terminaciones prolijas.",
-                  img: "/img/fabricacion/1.jpg",
-                },
-                {
-                  title: "Pintura y detalles",
-                  desc: "Acabado final para máxima durabilidad.",
-                  img: "/img/fabricacion/2.jpg",
-                },
+                { title: "Armado y soldadura", desc: "Estructura reforzada y terminaciones prolijas.", img: "/img/fabricacion/1.jpg" },
+                { title: "Pintura y detalles", desc: "Acabado final para máxima durabilidad.", img: "/img/fabricacion/2.jpg" },
               ].map((item, i) => (
                 <motion.div
                   key={i}
@@ -757,34 +730,20 @@ export default function App() {
                   className="
                     group relative overflow-hidden
                     ring-1 ring-gray-200 shadow-sm hover:shadow-md transition
-                    min-h-[220px] sm:min-h-[240px]
-                    lg:flex-1
+                    min-h-[180px] sm:min-h-[220px] lg:flex-1 rounded-xl
                   "
                 >
-                  {/* Imagen full */}
                   <img
                     src={item.img}
                     alt={item.title}
-                    className="
-                      absolute inset-0 w-full h-full object-cover
-                      transition-transform duration-500
-                      group-hover:scale-[1.04]
-                    "
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04] rounded-xl"
                     loading="lazy"
                   />
-
-                  {/* Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent" />
-
-                  {/* Texto */}
-                  <div className="absolute inset-x-0 bottom-0 p-6">
-                    <h3 className="text-white font-extrabold text-xl drop-shadow">
-                      {item.title}
-                    </h3>
-                    <p className="mt-1 text-white/85 text-sm drop-shadow">
-                      {item.desc}
-                    </p>
-                    <div className="mt-3 h-[2.5px] w-12 bg-[#00c2b8] transition-all duration-300 group-hover:w-16" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent rounded-xl" />
+                  <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6">
+                    <h3 className="text-white font-extrabold text-lg drop-shadow">{item.title}</h3>
+                    <p className="mt-1 text-white/85 text-sm drop-shadow">{item.desc}</p>
+                    <div className="mt-2 h-[2.5px] w-10 bg-[#00c2b8] transition-all duration-300 group-hover:w-14 rounded-full" />
                   </div>
                 </motion.div>
               ))}
@@ -792,17 +751,14 @@ export default function App() {
           </div>
         </div>
       </section>
-      {/* ================= FIN FABRICACIÓN ================= */}
 
-
-
-      {/* CÓMO TRABAJAMOS */}
+      {/* ===== CÓMO TRABAJAMOS ===== */}
       <section
         id="pasos"
-        className="relative py-16 sm:py-20 scroll-mt-24 bg-center bg-cover bg-no-repeat"
+        className="relative py-12 sm:py-16 lg:py-20 scroll-mt-24 bg-center bg-cover bg-no-repeat"
         style={{ backgroundImage: "url('/img/bg-como-trabajamos.png')" }}
       >
-        <div className="container px-4 mx-auto max-w-7xl">
+        <div className="container px-4 sm:px-6 mx-auto max-w-7xl">
           <motion.div {...fadeIn} className="max-w-3xl">
             <h2 className="mt-3 text-2xl sm:text-3xl md:text-4xl font-bold text-[#154f54]">
               Cómo trabajamos
@@ -810,159 +766,103 @@ export default function App() {
           </motion.div>
 
           <motion.div
-            className="mt-10 grid gap-6 md:gap-8 md:grid-cols-3"
+            className="mt-8 sm:mt-10 grid gap-4 sm:gap-6 md:gap-8 md:grid-cols-3"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
             variants={{
               hidden: { opacity: 0, y: 20 },
               visible: {
-                opacity: 1,
-                y: 0,
+                opacity: 1, y: 0,
                 transition: { staggerChildren: 0.15, duration: 0.5 },
               },
             }}
           >
-            {/* 1) Asesoramiento */}
-            <motion.div
-              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
-              whileHover={{ y: -6, boxShadow: "0 18px 35px rgba(0,0,0,0.12)" }}
-              transition={{ type: "spring", stiffness: 160, damping: 18 }}
-              className="relative bg-white shadow-md ring-1 ring-gray-100 p-6 flex flex-col h-full overflow-hidden"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <span className="grid h-10 w-10 place-content-center bg-[#e6f3f4] font-bold text-[#154f54] text-lg">
-                  1
-                </span>
-                <div className="flex flex-col">
-                  <h3 className="text-lg font-semibold text-gray-800">Asesoramiento</h3>
-                  <span className="text-xs uppercase tracking-wide text-gray-400">Primer contacto</span>
+            {[
+              {
+                num: 1,
+                title: "Asesoramiento",
+                sub: "Primer contacto",
+                footer: "Ideal para definir bien el proyecto antes de fabricar.",
+                items: [
+                  { key: "A", text: "Te contactás con nosotros y pedís tu presupuesto." },
+                  { key: "B", text: "Cotizamos en base a las medidas que nos pasaste." },
+                  { key: "C", text: "Realizamos una visita a tu domicilio para:", sub: ["Corroborar medidas.", "Relevar cómo haríamos la instalación y prever cualquier detalle.", "Ajustar el presupuesto con las medidas finales para dar el OK y pasar a la fabricación."] },
+                ],
+              },
+              {
+                num: 2,
+                title: "Fabricación",
+                sub: "Producción a medida",
+                footer: "Todo el proceso se realiza con materiales de primera y control de calidad.",
+                items: [
+                  { key: "A", text: "Se solicita una seña de aproximadamente el 50% del presupuesto para iniciar la fabricación." },
+                  { key: "B", text: "Con las medidas de tu portón y la seña abonada se realiza el pedido a fábrica." },
+                  { key: "C", text: "El área de ingeniería se encarga de los planos y de brindar toda la información al sector de producción." },
+                  { key: "D", text: (<>La fabricación demora entre <strong>25 y 30 días</strong>.</>) },
+                ],
+              },
+              {
+                num: 3,
+                title: "Instalación",
+                sub: "Puesta en marcha",
+                footer: "Te explicamos el uso y quedamos disponibles ante cualquier consulta.",
+                items: [
+                  { key: "A", text: "Con el portón ya fabricado, coordinamos la instalación con el cliente." },
+                  { key: "B", text: "Comenzamos ubicando el portón a nivel y a plomo." },
+                  { key: "C", text: "Lo empotramos, le damos apertura y realizamos la puesta a punto manual." },
+                  { key: "D", text: "Luego automatizamos con el motor correspondiente." },
+                  { key: "E", text: (<>El portón queda instalado, automatizado y funcionando. Este proceso demora entre <strong>4 y 6 horas</strong>. Queda <strong>100% operativo el mismo día</strong>.</>) },
+                ],
+              },
+            ].map((step) => (
+              <motion.div
+                key={step.num}
+                variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
+                whileHover={{ y: -5, boxShadow: "0 16px 32px rgba(0,0,0,0.10)" }}
+                transition={{ type: "spring", stiffness: 160, damping: 18 }}
+                className="relative bg-white shadow-md ring-1 ring-gray-100 p-5 sm:p-6 flex flex-col h-full overflow-hidden rounded-xl"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="grid h-10 w-10 place-content-center bg-[#e6f3f4] font-bold text-[#154f54] text-lg rounded-lg flex-shrink-0">
+                    {step.num}
+                  </span>
+                  <div className="flex flex-col">
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-800">{step.title}</h3>
+                    <span className="text-xs uppercase tracking-wide text-gray-400">{step.sub}</span>
+                  </div>
                 </div>
-              </div>
 
-              <ul className="space-y-2 text-sm text-gray-600 flex-1">
-                <li>
-                  <span className="font-semibold text-[#154f54]">A.</span> Te contactás con nosotros y pedís tu
-                  presupuesto.
-                </li>
-                <li>
-                  <span className="font-semibold text-[#154f54]">B.</span> Cotizamos en base a las medidas que nos
-                  pasaste.
-                </li>
-                <li>
-                  <span className="font-semibold text-[#154f54]">C.</span> Realizamos una visita a tu domicilio para:
-                  <ul className="mt-2 ml-4 space-y-1 list-disc">
-                    <li>Corroborar medidas.</li>
-                    <li>Relevar cómo haríamos la instalación y prever cualquier detalle.</li>
-                    <li>Ajustar el presupuesto con las medidas finales para dar el OK y pasar a la fabricación.</li>
-                  </ul>
-                </li>
-              </ul>
+                <ul className="space-y-2 text-sm text-gray-600 flex-1">
+                  {step.items.map((item) => (
+                    <li key={item.key}>
+                      <span className="font-semibold text-[#154f54]">{item.key}.</span>{" "}
+                      {item.text}
+                      {item.sub && (
+                        <ul className="mt-2 ml-4 space-y-1 list-disc text-xs text-gray-500">
+                          {item.sub.map((s, si) => <li key={si}>{s}</li>)}
+                        </ul>
+                      )}
+                    </li>
+                  ))}
+                </ul>
 
-              <div className="mt-4 pt-3 border-t border-dashed border-gray-200 text-xs text-gray-500">
-                Ideal para definir bien el proyecto antes de fabricar.
-              </div>
-            </motion.div>
-
-            {/* 2) Fabricación */}
-            <motion.div
-              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
-              whileHover={{ y: -6, boxShadow: "0 18px 35px rgba(0,0,0,0.12)" }}
-              transition={{ type: "spring", stiffness: 160, damping: 18 }}
-              className="relative bg-white shadow-md ring-1 ring-gray-100 p-6 flex flex-col h-full overflow-hidden"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <span className="grid h-10 w-10 place-content-center bg-[#e6f3f4] font-bold text-[#154f54] text-lg">
-                  2
-                </span>
-                <div className="flex flex-col">
-                  <h3 className="text-lg font-semibold text-gray-800">Fabricación</h3>
-                  <span className="text-xs uppercase tracking-wide text-gray-400">Producción a medida</span>
+                <div className="mt-4 pt-3 border-t border-dashed border-gray-200 text-xs text-gray-500">
+                  {step.footer}
                 </div>
-              </div>
-
-              <ul className="space-y-2 text-sm text-gray-600 flex-1">
-                <li>
-                  <span className="font-semibold text-[#154f54]">A.</span> Se solicita una seña de aproximadamente el
-                  50% del presupuesto para iniciar la fabricación.
-                </li>
-                <li>
-                  <span className="font-semibold text-[#154f54]">B.</span> Con las medidas de tu portón y la seña
-                  abonada se realiza el pedido a fábrica.
-                </li>
-                <li>
-                  <span className="font-semibold text-[#154f54]">C.</span> El área de ingeniería se encarga de los
-                  planos y de brindar toda la información al sector de producción.
-                </li>
-                <li>
-                  <span className="font-semibold text-[#154f54]">D.</span> La fabricación demora entre{" "}
-                  <span className="font-semibold">25 y 30 días</span>.
-                </li>
-              </ul>
-
-              <div className="mt-4 pt-3 border-t border-dashed border-gray-200 text-xs text-gray-500">
-                Todo el proceso se realiza con materiales de primera y control de calidad.
-              </div>
-            </motion.div>
-
-            {/* 3) Instalación */}
-            <motion.div
-              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
-              whileHover={{ y: -6, boxShadow: "0 18px 35px rgba(0,0,0,0.12)" }}
-              transition={{ type: "spring", stiffness: 160, damping: 18 }}
-              className="relative bg-white shadow-md ring-1 ring-gray-100 p-6 flex flex-col h-full overflow-hidden"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <span className="grid h-10 w-10 place-content-center bg-[#e6f3f4] font-bold text-[#154f54] text-lg">
-                  3
-                </span>
-                <div className="flex flex-col">
-                  <h3 className="text-lg font-semibold text-gray-800">Instalación</h3>
-                  <span className="text-xs uppercase tracking-wide text-gray-400">Puesta en marcha</span>
-                </div>
-              </div>
-
-              <ul className="space-y-2 text-sm text-gray-600 flex-1">
-                <li>
-                  <span className="font-semibold text-[#154f54]">A.</span> Con el portón ya fabricado, coordinamos la
-                  instalación con el cliente.
-                </li>
-                <li>
-                  <span className="font-semibold text-[#154f54]">B.</span> Comenzamos ubicando el portón a nivel y a
-                  plomo.
-                </li>
-                <li>
-                  <span className="font-semibold text-[#154f54]">C.</span> Lo empotramos, le damos apertura y realizamos
-                  la puesta a punto manual.
-                </li>
-                <li>
-                  <span className="font-semibold text-[#154f54]">D.</span> Luego automatizamos con el motor
-                  correspondiente.
-                </li>
-                <li>
-                  <span className="font-semibold text-[#154f54]">E.</span> El portón queda instalado, automatizado y
-                  funcionando. Este proceso se llama{" "}
-                  <span className="italic">instalación en seco con apertura y puesta a punto</span> y demora entre{" "}
-                  <span className="font-semibold">4 y 6 horas</span>. El portón queda{" "}
-                  <span className="font-semibold">100% operativo el mismo día</span>.
-                </li>
-              </ul>
-
-              <div className="mt-4 pt-3 border-t border-dashed border-gray-200 text-xs text-gray-500">
-                Te explicamos el uso y quedamos disponibles ante cualquier consulta.
-              </div>
-            </motion.div>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </section>
 
-      {/* FAQ */}
-      <section id="faq" className="py-20">
-        <div className="container px-4 mx-auto max-w-7xl">
-          <motion.h2 {...fadeIn} className="text-3xl md:text-4xl font-bold text-[#154f54] text-center">
+      {/* ===== FAQ ===== */}
+      <section id="faq" className="py-12 sm:py-20 bg-white">
+        <div className="container px-4 sm:px-6 mx-auto max-w-4xl">
+          <motion.h2 {...fadeIn} className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#154f54] text-center">
             Preguntas frecuentes
           </motion.h2>
-          <div className="mt-6 grid gap-4">
+          <div className="mt-6 sm:mt-8 grid gap-3 sm:gap-4">
             {[
               { q: "¿Hacen envíos e instalación?", a: "Sí, instalamos en la ciudad y alrededores. Consultanos por tu zona." },
               { q: "¿Tienen garantía?", a: "Sí, garantía escrita por materiales y mano de obra." },
@@ -971,171 +871,155 @@ export default function App() {
               <motion.details
                 key={idx}
                 {...fadeIn}
-                className=" bg-white shadow-md ring-1 ring-gray-100 p-6"
+                className="bg-white shadow-sm ring-1 ring-gray-100 p-5 sm:p-6 rounded-xl group"
               >
-                <summary className="cursor-pointer list-none font-semibold text-gray-800">
+                <summary className="cursor-pointer list-none font-semibold text-gray-800 text-sm sm:text-base">
                   <span className="inline-flex items-center gap-2 text-[#154f54]">
                     <CheckCircle2 size={18} /> {item.q}
                   </span>
                 </summary>
-                <p className="mt-2 text-sm text-gray-600">{item.a}</p>
+                <p className="mt-3 text-sm text-gray-600 leading-relaxed">{item.a}</p>
               </motion.details>
             ))}
           </div>
         </div>
       </section>
 
-      {/* NOSOTROS */}
-      <section id="nosotros" className="py-20 bg-white">
-        <div className="container px-4 mx-auto max-w-5xl text-center">
-          <h2 className="text-3xl font-bold text-[#154f54]">Sobre nosotros</h2>
-          <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
+      {/* ===== NOSOTROS ===== */}
+      <section id="nosotros" className="py-12 sm:py-20 bg-gray-50">
+        <div className="container px-4 sm:px-6 mx-auto max-w-5xl text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold text-[#154f54]">Sobre nosotros</h2>
+          <p className="mt-4 text-gray-600 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
             En Docta Portones nos especializamos en la fabricación e instalación de portones automáticos y manuales.
             Combinamos más de 10 años de experiencia, materiales de primera calidad y atención personalizada.
           </p>
         </div>
       </section>
 
+      {/* ===== FOOTER ===== */}
+      <footer className="mt-0">
+        <div className="bg-gradient-to-b from-[#3a3f45] to-[#2b2f35] text-white">
+          <div className="container mx-auto max-w-7xl px-5 sm:px-6 py-10 sm:py-14">
+            <div className="grid gap-10 sm:gap-12 md:grid-cols-3">
 
-      {/* FOOTER (estilo como la captura) */}
-<footer className="mt-10">
-  {/* bloque oscuro */}
-  <div className="bg-gradient-to-b from-[#3a3f45] to-[#2b2f35] text-white">
-    <div className="container mx-auto max-w-7xl px-6 py-14">
-      <div className="grid gap-12 md:grid-cols-3">
-        {/* Col 1: Logo + descripción */}
-        <div>
-          <div className="flex items-center gap-3">
-            <img
-  src="/logo.png"
-  alt="Docta Portones"
-  className="h-14 sm:h-16 md:h-20 w-auto drop-shadow-[0_10px_25px_rgba(0,0,0,0.35)]"
-  style={{ minWidth: "150px" }}
-/>
-          </div>
-
-          <p className="mt-5 text-sm leading-relaxed text-white/75 max-w-sm">
-            Fabricación e instalación de portones automáticos y manuales.
-            Productos que combinan diseño, seguridad y terminaciones de calidad.
-          </p>
-        </div>
-
-        {/* Col 2: Links */}
-        <div>
-          <h4 className="text-sm font-extrabold tracking-wide uppercase">
-            Links de interés
-          </h4>
-
-          <ul className="mt-5 space-y-3 text-sm">
-            {[
-              { id: "inicio", label: "Inicio" },
-              { id: "productos", label: "Productos" },
-              { id: "Fabricación", label: "Fabricación" },
-              { id: "pasos", label: "Proceso" },
-              { id: "faq", label: "Preguntas frecuentes" },
-              { id: "nosotros", label: "Nosotros" },
-            ].map((l) => (
-              <li key={l.id}>
-                <a
-                  href={`#${l.id}`}
-                  className="group inline-flex items-center gap-3 text-white/80 hover:text-white transition"
-                >
-                  {/* iconito tipo “flecha” como la captura */}
-                  <span className="grid h-6 w-6 place-content-center rounded-full bg-white/10 ring-1 ring-white/15 group-hover:bg-[#154f54]/60 group-hover:ring-[#00c2b8]/60 transition">
-                    <span className="text-[#00c2b8] group-hover:text-white transition">
-                      ›
-                    </span>
-                  </span>
-                  {l.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Col 3: Contacto */}
-        <div>
-          <h4 className="text-sm font-extrabold tracking-wide uppercase">
-            Información de contacto
-          </h4>
-
-          <div className="mt-5 space-y-4 text-sm text-white/75">
-            <div className="flex items-start gap-3">
-              <span className="mt-0.5 text-[#00c2b8]">☎</span>
-              <a className="hover:text-white transition" href="tel:+5493518791565">
-                +54 9 351 879 1565
-              </a>
-            </div>
-
-            <div className="flex items-start gap-3">
-              <span className="mt-0.5 text-[#00c2b8]">📍</span>
+              {/* Col 1: Logo + descripción */}
               <div>
-                <div className="font-semibold text-white/90">Córdoba, Argentina</div>
-                <div className="text-white/70">Instalaciones en ciudad y alrededores</div>
+                <div className="flex items-center gap-3">
+                  <img
+                    src="/logo2.png"
+                    alt="Docta Portones"
+                    className="h-12 sm:h-14 md:h-16 w-auto"
+                    style={{
+                      minWidth: "120px",
+                      /* Elimina el fondo negro del logo */
+                      filter: "brightness(0) invert(1)",
+                    }}
+                  />
+                </div>
+                <p className="mt-5 text-sm leading-relaxed text-white/70 max-w-sm">
+                  Fabricación e instalación de portones automáticos y manuales.
+                  Productos que combinan diseño, seguridad y terminaciones de calidad.
+                </p>
+
+                {/* Redes mobile-friendly */}
+                <div className="mt-6 flex items-center gap-4">
+                  <a href="https://www.instagram.com/docta.portones/" target="_blank" rel="noreferrer" className="text-white/60 hover:text-white transition" aria-label="Instagram">
+                    <Instagram size={18} />
+                  </a>
+                  <a href="https://facebook.com" target="_blank" rel="noreferrer" className="text-white/60 hover:text-white transition" aria-label="Facebook">
+                    <Facebook size={18} />
+                  </a>
+                  <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-white/60 hover:text-white transition" aria-label="LinkedIn">
+                    <Linkedin size={18} />
+                  </a>
+                </div>
+              </div>
+
+              {/* Col 2: Links */}
+              <div>
+                <h4 className="text-xs font-extrabold tracking-widest uppercase text-white/50">Links de interés</h4>
+                <ul className="mt-5 space-y-3 text-sm">
+                  {[
+                    { id: "inicio", label: "Inicio" },
+                    { id: "productos", label: "Productos" },
+                    { id: "Fabricación", label: "Fabricación" },
+                    { id: "pasos", label: "Proceso" },
+                    { id: "faq", label: "Preguntas frecuentes" },
+                    { id: "nosotros", label: "Nosotros" },
+                  ].map((l) => (
+                    <li key={l.id}>
+                      <a
+                        href={`#${l.id}`}
+                        className="group inline-flex items-center gap-3 text-white/75 hover:text-white transition"
+                      >
+                        <span className="grid h-6 w-6 place-content-center rounded-full bg-white/10 ring-1 ring-white/15 group-hover:bg-[#154f54]/60 group-hover:ring-[#00c2b8]/60 transition text-[#00c2b8] group-hover:text-white text-sm">
+                          ›
+                        </span>
+                        {l.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Col 3: Contacto */}
+              <div>
+                <h4 className="text-xs font-extrabold tracking-widest uppercase text-white/50">Información de contacto</h4>
+
+                <div className="mt-5 space-y-4 text-sm text-white/70">
+                  <div className="flex items-start gap-3">
+                    <span className="mt-0.5 text-[#00c2b8]">☎</span>
+                    <a className="hover:text-white transition" href="tel:+5493518791565">
+                      +54 9 351 879 1565
+                    </a>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <span className="mt-0.5 text-[#00c2b8]">📍</span>
+                    <div>
+                      <div className="font-semibold text-white/90">Paraguay 396</div>
+                      <div className="text-white/60 text-xs mt-0.5">Córdoba Capital, Argentina</div>
+                      <div className="text-white/55 text-xs">Instalaciones en ciudad y alrededores</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <span className="mt-0.5 text-[#00c2b8]">✉</span>
+                    <a className="hover:text-white transition break-all" href="mailto:doctaportones@gmail.com">
+                      doctaportones@gmail.com
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="flex items-start gap-3">
-              <span className="mt-0.5 text-[#00c2b8]">✉</span>
-              <a
-                className="hover:text-white transition"
-                href="mailto:doctaportones@gmail.com"
-              >
-                doctaportones@gmail.com
-              </a>
+            <div className="mt-10 sm:mt-12 pt-6 sm:pt-8 border-t border-white/10 text-center text-xs text-white/40">
+              © {new Date().getFullYear()} Docta Portones — Todos los derechos reservados.
             </div>
           </div>
-
-          {/* redes */}
-          <div className="mt-6 flex items-center gap-4">
-            <a
-              href="https://www.instagram.com/docta.portones/"
-              target="_blank"
-              rel="noreferrer"
-              className="text-white/70 hover:text-white transition"
-              aria-label="Instagram"
-            >
-              <Instagram size={18} />
-            </a>
-            <a
-              href="https://facebook.com"
-              target="_blank"
-              rel="noreferrer"
-              className="text-white/70 hover:text-white transition"
-              aria-label="Facebook"
-            >
-              <Facebook size={18} />
-            </a>
-            <a
-              href="https://linkedin.com"
-              target="_blank"
-              rel="noreferrer"
-              className="text-white/70 hover:text-white transition"
-              aria-label="LinkedIn"
-            >
-              <Linkedin size={18} />
-            </a>
-          </div>
         </div>
-      </div>
+      </footer>
 
-      {/* línea + copyright centrado */}
-      <div className="mt-12 pt-8 border-t border-white/10 text-center text-xs text-white/60">
-        © {new Date().getFullYear()} Docta Portones — Todos los derechos reservados.
-      </div>
-    </div>
-  </div>
-</footer>
-
-      {/* BOTÓN WHATSAPP */}
+      {/* ===== BOTÓN WHATSAPP FLOTANTE (circular) ===== */}
       <a
         href={WHATSAPP}
         target="_blank"
         rel="noreferrer"
-        className="fixed bottom-6 right-6 grid h-12 w-12 place-content-center bg-[#154f54] text-white shadow-lg hover:scale-105 transition-transform"
+        className="
+          fixed bottom-5 right-5 sm:bottom-6 sm:right-6
+          h-14 w-14
+          rounded-full
+          bg-[#25D366]
+          text-white
+          shadow-[0_4px_20px_rgba(37,211,102,0.45)]
+          hover:scale-110 hover:shadow-[0_6px_28px_rgba(37,211,102,0.55)]
+          transition-all duration-300
+          flex items-center justify-center
+          z-40
+        "
         aria-label="WhatsApp"
       >
-        <MessageCircle />
+        <MessageCircle size={26} strokeWidth={1.8} />
       </a>
     </div>
   );
