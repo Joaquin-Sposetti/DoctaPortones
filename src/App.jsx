@@ -1,92 +1,23 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Award, Clock, MapPin } from "lucide-react";
+import { AnimatedFAQ } from "./components/AnimatedFAQ";
+import { Footer } from "./components/Footer";
+import { FloatingWhatsApp } from "./components/FloatingWhatsApp";
+import { GalleryImage } from "./components/GalleryImage";
+import { GalleryModal } from "./components/GalleryModal";
+import { HeroSlide } from "./components/HeroSlide";
+import { Navbar } from "./components/Navbar";
+import { ProductCard } from "./components/ProductCard";
+import { ProTextType } from "./components/ProTextType";
 import {
-  Menu,
-  X,
-  Phone,
-  MessageCircle,
-  Instagram,
-  Facebook,
-  Linkedin,
-  CheckCircle2,
-  ChevronLeft,
-  ChevronRight,
-  X as CloseIcon,
-} from "lucide-react";
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
-const WHATSAPP = "https://wa.me/5493518791565";
-
-const nav = [
-  { id: "inicio", label: "Inicio" },
-  { id: "productos", label: "Productos" },
-  { id: "Fabricación", label: "Fabricación" },
-  { id: "pasos", label: "Proceso" },
-  { id: "faq", label: "Preguntas" },
-  { id: "nosotros", label: "Nosotros" },
-];
-
-const PRODUCT_CARDS = [
-  { title: "Levadizos", img: "/img/cards/levadizos.jpg" },
-  { title: "Corredizos", img: "/img/cards/corredizos.jpg" },
-  { title: "Frentes completos", img: "/img/cards/frentes.jpg" },
-  { title: "Batientes", img: "/img/cards/batientes.jpg" },
-  { title: "Puertas", img: "/img/cards/puertas.jpg" },
-  { title: "Paños fijos", img: "/img/cards/panios.jpg" },
-];
-
-const PRODUCT_TITLES = PRODUCT_CARDS.map((p) => p.title);
-
-const PRODUCT_GALLERY = {
-  Levadizos: [
-    "/img/galeria/levadizos/1.jpg",
-    "/img/galeria/levadizos/2.jpg",
-    "/img/galeria/levadizos/3.jpg",
-    "/img/galeria/levadizos/4.jpg",
-    "/img/galeria/levadizos/5.jpg",
-    "/img/galeria/levadizos/6.jpg",
-  ],
-  Corredizos: [
-    "/img/galeria/corredizos/1.jpg",
-    "/img/galeria/corredizos/2.jpg",
-    "/img/galeria/corredizos/3.jpg",
-    "/img/galeria/corredizos/4.jpg",
-    "/img/galeria/corredizos/5.jpg",
-    "/img/galeria/corredizos/6.jpg",
-  ],
-  "Frentes completos": [
-    "/img/galeria/frentes/1.jpg",
-    "/img/galeria/frentes/2.jpg",
-    "/img/galeria/frentes/3.jpg",
-    "/img/galeria/frentes/4.jpg",
-    "/img/galeria/frentes/5.jpg",
-    "/img/galeria/frentes/6.jpg",
-  ],
-  Batientes: [
-    "/img/galeria/batientes/1.jpg",
-    "/img/galeria/batientes/2.jpg",
-    "/img/galeria/batientes/3.jpg",
-    "/img/galeria/batientes/4.jpg",
-    "/img/galeria/batientes/5.jpg",
-    "/img/galeria/batientes/6.jpg",
-  ],
-  Puertas: [
-    "/img/galeria/puertas/1.jpg",
-    "/img/galeria/puertas/2.jpg",
-    "/img/galeria/puertas/3.jpg",
-    "/img/galeria/puertas/4.jpg",
-    "/img/galeria/puertas/5.jpg",
-    "/img/galeria/puertas/6.jpg",
-  ],
-  "Paños fijos": [
-    "/img/galeria/panios/1.jpg",
-    "/img/galeria/panios/2.jpg",
-    "/img/galeria/panios/3.jpg",
-    "/img/galeria/panios/4.jpg",
-    "/img/galeria/panios/5.jpg",
-    "/img/galeria/panios/6.jpg",
-  ],
-};
+  NAV_ITEMS,
+  PRODUCT_CARDS,
+  PRODUCT_GALLERY,
+  PRODUCT_TITLES,
+  WHATSAPP,
+} from "./data/site";
+import { toWebp } from "./lib/media";
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -94,240 +25,6 @@ const fadeIn = {
   viewport: { once: true, amount: 0.2 },
   transition: { duration: 0.6 },
 };
-
-function ProductCard({ c, onSelect }) {
-  const [loaded, setLoaded] = useState(false);
-  const lowResSrc = c.imgLow || c.img?.replace(/(\.\w+)$/, "-low$1");
-
-  return (
-    <button
-      type="button"
-      onClick={() => onSelect?.(c.title)}
-      className="
-        group relative block overflow-hidden text-left
-        ring-1 ring-black/10 bg-gray-100
-        shadow-sm hover:shadow-xl transition-all duration-300
-        h-full w-full aspect-[4/3] md:aspect-auto
-        rounded-lg
-      "
-    >
-      <div className="absolute inset-0 bg-gray-200 rounded-lg" />
-
-      <img
-        src={lowResSrc}
-        alt=""
-        className={`
-          absolute inset-0 h-full w-full object-cover rounded-lg
-          transition-opacity duration-700 ease-out
-          ${loaded ? "opacity-0" : "opacity-100 blur-sm scale-105"}
-        `}
-        aria-hidden="true"
-      />
-
-      <img
-        src={c.img}
-        alt={c.title}
-        className={`
-          absolute inset-0 z-0 h-full w-full object-cover rounded-lg
-          transition-all duration-700 ease-out
-          group-hover:scale-[1.06]
-          ${loaded ? "opacity-100" : "opacity-0"}
-        `}
-        loading="lazy"
-        decoding="async"
-        onLoad={() => setLoaded(true)}
-        onError={() => setLoaded(true)}
-      />
-
-      {!loaded && (
-        <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden rounded-lg">
-          <div className="absolute inset-0 animate-shimmer" />
-        </div>
-      )}
-
-      <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent rounded-lg" />
-      <div
-        className="
-          pointer-events-none absolute inset-4 z-10
-          ring-2 ring-[#00c2b8] transition-all duration-300
-          group-hover:inset-3 rounded-sm
-        "
-      />
-
-      <div className="relative z-20 flex h-full w-full items-end p-5 sm:p-6">
-        <div className="w-full">
-          <h3
-            className="
-              font-extrabold text-white drop-shadow-lg
-              text-lg sm:text-xl md:text-2xl
-              transition-all duration-300
-              group-hover:translate-x-1
-            "
-          >
-            {c.title}
-          </h3>
-          <div className="mt-1 h-[2.5px] w-10 bg-[#00c2b8] transition-all duration-300 group-hover:w-14" />
-        </div>
-      </div>
-    </button>
-  );
-}
-
-function GalleryImage({ src, alt, onClick }) {
-  const [loaded, setLoaded] = useState(false);
-  const lowResSrc = src.replace(/(\.\w+)$/, "-low$1");
-
-  return (
-    <button
-      onClick={onClick}
-      className="
-        relative overflow-hidden bg-gray-200 ring-1 ring-gray-200
-        shadow-sm hover:shadow-lg transition-all duration-300
-        aspect-[4/3] focus:outline-none rounded-lg
-      "
-    >
-      <img
-        src={lowResSrc}
-        alt=""
-        className={`
-          absolute inset-0 w-full h-full object-cover rounded-lg
-          transition-opacity duration-700
-          ${loaded ? "opacity-0" : "opacity-100 blur-sm scale-[1.02]"}
-        `}
-        aria-hidden="true"
-      />
-
-      <img
-        src={src}
-        alt={alt}
-        className={`
-          absolute inset-0 w-full h-full object-cover rounded-lg
-          transition-all duration-700 ease-out
-          hover:scale-105
-          ${loaded ? "opacity-100" : "opacity-0"}
-        `}
-        loading="lazy"
-        onLoad={() => setTimeout(() => setLoaded(true), 400)}
-        onError={() => setLoaded(true)}
-      />
-
-      {!loaded && (
-        <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden rounded-lg">
-          <div className="absolute inset-0 bg-gray-300/60" />
-          <div className="absolute inset-0 animate-shimmer" />
-        </div>
-      )}
-    </button>
-  );
-}
-
-// Nuevo componente: GalleryModal
-function GalleryModal({ images, initialIndex, onClose }) {
-  const [currentIndex, setCurrentIndex] = useState(initialIndex);
-  const [zoomed, setZoomed] = useState(false);
-
-  const currentImage = images[currentIndex];
-
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-    setZoomed(false);
-  };
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-    setZoomed(false);
-  };
-
-  const handleImageClick = () => {
-    setZoomed(!zoomed);
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "ArrowLeft") handlePrev();
-    if (e.key === "ArrowRight") handleNext();
-    if (e.key === "Escape") onClose();
-  };
-
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
-      onClick={onClose}
-    >
-      <motion.div
-        className="relative max-w-[90vw] max-h-[90vh] flex items-center justify-center"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <img
-          src={currentImage}
-          alt="Imagen ampliada"
-          className={`
-            max-w-full max-h-[90vh] object-contain cursor-pointer
-            transition-transform duration-300
-            ${zoomed ? "scale-150" : "scale-100"}
-          `}
-          onClick={handleImageClick}
-        />
-
-        {/* Botones de navegación */}
-        <button
-  onClick={handlePrev}
-  className="
-    absolute left-3 md:left-8 top-1/2 -translate-y-1/2
-    flex items-center justify-center
-    w-14 h-14 md:w-16 md:h-16
-    rounded-full
-    bg-black/50 backdrop-blur-md border border-white/30
-    text-white hover:bg-[#154f54]/80 hover:border-[#00c2b8]/70
-    transition-all duration-300
-    shadow-xl hover:shadow-2xl hover:scale-110
-    focus:outline-none focus:ring-2 focus:ring-[#00c2b8]
-    z-50
-    glow-arrow                     /* ← aquí */
-  "
-  aria-label="Imagen anterior"
->
-  <ChevronLeft size={32} strokeWidth={3} />
-</button>
-        <button
-          onClick={handleNext}
-          className="
-            absolute right-4 top-1/2 -translate-y-1/2
-            flex items-center justify-center
-            w-14 h-14 md:w-16 md:h-16
-            rounded-full
-            bg-black/50 backdrop-blur-md border border-white/30
-            text-white hover:bg-[#154f54]/80 hover:border-[#00c2b8]/70
-            transition-all duration-300
-            shadow-xl hover:shadow-2xl hover:scale-110
-            focus:outline-none focus:ring-2 focus:ring-[#00c2b8]
-            z-50
-            glow-arrow                     /* ← aquí */
-          "
-          aria-label="Siguiente"
-        >
-          <ChevronRight size={48} />
-        </button>
-
-        {/* Cerrar */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-white hover:text-[#00c2b8] transition"
-          aria-label="Cerrar"
-        >
-          <CloseIcon size={32} />
-        </button>
-      </motion.div>
-    </motion.div>
-  );
-}
 
 export default function App() {
   const videoRef = useRef(null);
@@ -344,7 +41,6 @@ export default function App() {
     }
   };
 
-  const [open, setOpen] = useState(false);
   const [activeProduct, setActiveProduct] = useState(PRODUCT_TITLES[0]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
@@ -369,164 +65,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 text-gray-900">
-      {/* NAVBAR */}
-      <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/90 backdrop-blur-lg shadow-[0_2px_8px_rgba(0,0,0,0.03)]">
-        <div className="container flex h-20 items-center justify-between px-10 mx-auto max-w-7xl">
-          <a
-            href="#inicio"
-            className="flex items-center hover:scale-[1.05] transition-transform"
-          >
-            <img
-              src="/icon.png"
-              alt="Docta Portones"
-              className="h-12 w-auto object-contain"
-              style={{ minWidth: "50px" }}
-            />
-          </a>
-
-          <nav className="hidden md:flex items-center gap-12 ml-10">
-  {nav.map((n) => (
-    <a
-      key={n.id}
-      href={`#${n.id}`}
-      className="
-        text-[15px] font-medium text-gray-600
-        hover:text-[#00c2b8]           /* ← aquí se pone verde al pasar el mouse */
-        transition-colors duration-300
-        relative group
-      "
-    >
-      {n.label}
-      {/* Línea que crece debajo (la que ya te gustaba) */}
-      <span 
-        className="
-          absolute left-0 bottom-[-4px] h-[2px] w-0 
-          bg-[#154f54] transition-all duration-300 
-          group-hover:w-full
-        "
-      />
-    </a>
-  ))}
-</nav>
-
-          <div className="hidden md:flex items-center gap-6 ml-8 pl-8 border-l border-gray-200">
-            <div className="flex items-center gap-3">
-              <a
-                href="https://www.instagram.com/docta.portones/"
-                title="Instagram"
-                target="_blank"
-                className="text-gray-500 hover:text-[#154f54] transition"
-                rel="noreferrer"
-              >
-                <Instagram size={20} />
-              </a>
-              <a
-                href="https://facebook.com"
-                title="Facebook"
-                target="_blank"
-                className="text-gray-500 hover:text-[#154f54] transition"
-                rel="noreferrer"
-              >
-                <Facebook size={20} />
-              </a>
-              <a
-                href="https://linkedin.com"
-                title="LinkedIn"
-                target="_blank"
-                className="text-gray-500 hover:text-[#154f54] transition"
-                rel="noreferrer"
-              >
-                <Linkedin size={20} />
-              </a>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <a
-                href={WHATSAPP}
-                target="_blank"
-                className="flex items-center justify-center gap-2 border border-[#154f54] text-[#154f54] px-5 py-2.5 hover:bg-[#154f54] hover:text-white transition shadow-sm hover:shadow-md font-medium leading-none"
-                style={{ minWidth: "120px", height: "45px" }}
-                rel="noreferrer"
-              >
-                <Phone size={18} /> Llamar
-              </a>
-            </div>
-          </div>
-
-          <button
-            className="md:hidden p-2 hover:bg-gray-100"
-            onClick={() => setOpen(true)}
-            aria-label="Abrir menú"
-          >
-            <Menu />
-          </button>
-        </div>
-
-        {/* MOBILE MENU */}
-        <AnimatePresence>
-          {open && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
-              onClick={() => setOpen(false)}
-            >
-              <motion.div
-                initial={{ x: "100%" }}
-                animate={{ x: 0 }}
-                exit={{ x: "100%" }}
-                transition={{ type: "tween", duration: 0.25 }}
-                className="fixed top-0 right-0 h-screen w-full max-w-xs sm:max-w-sm bg-white text-gray-800 p-6 shadow-lg flex flex-col"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <img
-                      src="/icon.png"
-                      className="h-9 w-auto object-contain"
-                      alt="Docta Portones"
-                    />
-                    <span className="font-bold text-[#154f54]">Menú</span>
-                  </div>
-                  <button
-                    className="p-2 hover:bg-gray-100"
-                    onClick={() => setOpen(false)}
-                    aria-label="Cerrar menú"
-                  >
-                    <X />
-                  </button>
-                </div>
-
-                <div className="mt-6">
-                  <nav className="flex flex-col gap-2 border-t border-gray-200 pt-6">
-                    {nav.map((n) => (
-                      <a
-                        key={n.id}
-                        href={`#${n.id}`}
-                        onClick={() => setOpen(false)}
-                        className="px-4 py-3 text-base font-medium hover:bg-gray-100 transition-colors"
-                      >
-                        {n.label}
-                      </a>
-                    ))}
-                  </nav>
-                </div>
-
-                <div className="flex flex-col gap-3 mt-4 w-full px-4">
-                  <a
-                    href="tel:+5493518791565"
-                    className="flex items-center justify-center gap-2 border border-[#0e5451] text-[#0e5451] font-medium py-2 hover:bg-[#0e5451]/10 transition text-sm md:text-base"
-                  >
-                    <Phone size={16} />
-                    Llamar
-                  </a>
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </header>
+      <Navbar navItems={NAV_ITEMS} whatsappUrl={WHATSAPP} />
 
       {/* HERO */}
       <section
@@ -535,21 +74,37 @@ export default function App() {
       >
         <div className="absolute inset-0 z-0">
           <div className="slideshow">
-            <div className="slide"><img src="/img/proyecto1.jpeg" alt="Portón 1" /></div>
-            <div className="slide"><img src="/img/proyecto2.jpeg" alt="Portón 2" /></div>
-            <div className="slide"><img src="/img/proyecto3.jpeg" alt="Portón 3" /></div>
-            <div className="slide"><img src="/img/proyecto4.jpeg" alt="Portón 4" /></div>
-            <div className="slide"><img src="/img/proyecto5.jpeg" alt="Portón 5" /></div>
-            <div className="slide"><img src="/img/proyecto6.jpeg" alt="Portón 6" /></div>
+            {[
+              "/img/proyecto1.jpeg",
+              "/img/proyecto2.jpeg",
+              "/img/proyecto3.jpeg",
+              "/img/proyecto4.jpeg",
+              "/img/proyecto5.jpeg",
+              "/img/proyecto6.jpeg",
+            ].map((src, index) => (
+              <HeroSlide
+                key={src}
+                src={src}
+                alt={`Portón ${index + 1}`}
+                eager={index === 0}
+              />
+            ))}
           </div>
           <div className="absolute inset-0 bg-black/40"></div>
         </div>
 
-        <div className="relative z-10 text-center text-white px-4 w-full">
-          <img
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="relative z-10 text-center text-white px-4 w-full"
+        >
+          <motion.img
             src="/logo.png"
             alt="Docta Portones"
             className="mx-auto mb-10 w-72 md:w-96 lg:w-[28rem] drop-shadow-2xl animate-fadeIn"
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 180, damping: 18 }}
           />
           <div className="absolute top-[70%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-full px-4 text-center">
             <h1 className="text-lg md:text-2xl lg:text-3xl text-white drop-shadow-xl">
@@ -561,7 +116,7 @@ export default function App() {
               Todos nuestros productos y motores cuentan con garantía oficial.
             </p>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* ===== PRODUCTOS ===== */}
@@ -655,7 +210,7 @@ export default function App() {
       </AnimatePresence>
 
       {/* ===== FABRICACIÓN ===== */}
-      <section id="Fabricación" className="py-12 sm:py-16 bg-gray-50">
+      <section id="fabricacion" className="py-12 sm:py-16 bg-gray-50">
         <div className="container px-4 sm:px-6 mx-auto max-w-7xl">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -684,14 +239,16 @@ export default function App() {
                 <video
                   ref={videoRef}
                   className="absolute inset-0 w-full h-full object-cover rounded-xl"
-                  src="/video/fabricacion.mp4"
-                  poster="/img/fabricacion/poster.jpg"
                   playsInline
+                  poster="/img/fabricacion/poster.webp"
                   preload="metadata"
                   controls={fabPlaying}
                   onPlay={() => setFabPlaying(true)}
                   onPause={() => setFabPlaying(false)}
-                />
+                >
+                  <source src="/video/fabricacion-optimized.mp4" type="video/mp4" />
+                  <source src="/video/fabricacion.mp4" type="video/mp4" />
+                </video>
 
                 {!fabPlaying && (
                   <div className="absolute inset-0 rounded-xl">
@@ -733,12 +290,16 @@ export default function App() {
                     min-h-[180px] sm:min-h-[220px] lg:flex-1 rounded-xl
                   "
                 >
-                  <img
-                    src={item.img}
-                    alt={item.title}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04] rounded-xl"
-                    loading="lazy"
-                  />
+                  <picture>
+                    <source srcSet={toWebp(item.img)} type="image/webp" />
+                    <img
+                      src={item.img}
+                      alt={item.title}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04] rounded-xl"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </picture>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent rounded-xl" />
                   <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6">
                     <h3 className="text-white font-extrabold text-lg drop-shadow">{item.title}</h3>
@@ -756,13 +317,16 @@ export default function App() {
       <section
         id="pasos"
         className="relative py-12 sm:py-16 lg:py-20 scroll-mt-24 bg-center bg-cover bg-no-repeat"
-        style={{ backgroundImage: "url('/img/bg-como-trabajamos.png')" }}
+        style={{ backgroundImage: "url('/img/bg-como-trabajamos.webp')" }}
       >
         <div className="container px-4 sm:px-6 mx-auto max-w-7xl">
-          <motion.div {...fadeIn} className="max-w-3xl">
+          <motion.div {...fadeIn} className="mx-auto max-w-3xl text-center">
             <h2 className="mt-3 text-2xl sm:text-3xl md:text-4xl font-bold text-[#154f54]">
               Cómo trabajamos
             </h2>
+            <p className="mt-3 text-sm sm:text-base text-gray-600">
+              Un proceso claro desde la primera consulta hasta la instalación final.
+            </p>
           </motion.div>
 
           <motion.div
@@ -856,171 +420,119 @@ export default function App() {
         </div>
       </section>
 
-      {/* ===== FAQ ===== */}
-      <section id="faq" className="py-12 sm:py-20 bg-white">
-        <div className="container px-4 sm:px-6 mx-auto max-w-4xl">
-          <motion.h2 {...fadeIn} className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#154f54] text-center">
-            Preguntas frecuentes
-          </motion.h2>
-          <div className="mt-6 sm:mt-8 grid gap-3 sm:gap-4">
-            {[
-              { q: "¿Hacen envíos e instalación?", a: "Sí, instalamos en la ciudad y alrededores. Consultanos por tu zona." },
-              { q: "¿Tienen garantía?", a: "Sí, garantía escrita por materiales y mano de obra." },
-              { q: "¿Puedo automatizar mi portón actual?", a: "En muchos casos sí. Evaluamos tu caso y te asesoramos." },
-            ].map((item, idx) => (
-              <motion.details
-                key={idx}
-                {...fadeIn}
-                className="bg-white shadow-sm ring-1 ring-gray-100 p-5 sm:p-6 rounded-xl group"
-              >
-                <summary className="cursor-pointer list-none font-semibold text-gray-800 text-sm sm:text-base">
-                  <span className="inline-flex items-center gap-2 text-[#154f54]">
-                    <CheckCircle2 size={18} /> {item.q}
-                  </span>
-                </summary>
-                <p className="mt-3 text-sm text-gray-600 leading-relaxed">{item.a}</p>
-              </motion.details>
-            ))}
-          </div>
-        </div>
-      </section>
+      <AnimatedFAQ />
 
       {/* ===== NOSOTROS ===== */}
-      <section id="nosotros" className="py-12 sm:py-20 bg-gray-50">
-        <div className="container px-4 sm:px-6 mx-auto max-w-5xl text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-[#154f54]">Sobre nosotros</h2>
-          <p className="mt-4 text-gray-600 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
-            En Docta Portones nos especializamos en la fabricación e instalación de portones automáticos y manuales.
-            Combinamos más de 10 años de experiencia, materiales de primera calidad y atención personalizada.
-          </p>
+      <section id="nosotros" className="relative overflow-hidden py-14 sm:py-20 bg-gray-50">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#154f54]/20 to-transparent" />
+        <div className="container px-4 sm:px-6 mx-auto max-w-7xl">
+          <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-stretch">
+            <motion.div
+              initial={{ opacity: 0, x: -24 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 0.65, ease: "easeOut" }}
+              className="relative min-h-[420px] overflow-hidden rounded-2xl shadow-[0_18px_50px_rgba(15,59,64,0.18)] ring-1 ring-black/10"
+            >
+              <picture>
+                <source srcSet={toWebp("/img/fabricacion/1.jpg")} type="image/webp" />
+                <img
+                  src="/img/fabricacion/1.jpg"
+                  alt="Equipo de Docta Portones trabajando en taller"
+                  className="absolute inset-0 h-full w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#062f32]/85 via-[#062f32]/20 to-transparent" />
+              <motion.div
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.25, duration: 0.5 }}
+                className="absolute bottom-5 left-5 right-5 rounded-2xl bg-[#062f32]/45 p-5 text-white shadow-2xl backdrop-blur-md ring-1 ring-white/25"
+              >
+                <div className="inline-flex rounded-full bg-white/12 px-3 py-1 text-xs font-bold uppercase tracking-wide text-[#00c2b8] ring-1 ring-white/15">
+                  Trabajo a medida
+                </div>
+                <ProTextType
+                  text={[
+                    "Relevamos cada medida con precisión.",
+                    "Fabricamos portones pensados para el uso diario.",
+                    "Instalamos y dejamos todo funcionando.",
+                  ]}
+                  typingSpeed={28}
+                  deletingSpeed={16}
+                  pauseDuration={4450}
+                  className="mt-3 block min-h-[54px] text-base font-semibold leading-relaxed text-white/90 sm:text-lg"
+                />
+              </motion.div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 24 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 0.65, ease: "easeOut" }}
+              className="relative flex min-h-[420px] flex-col justify-center rounded-2xl bg-white p-5 shadow-sm ring-1 ring-gray-100 sm:p-7 lg:p-8"
+            >
+              <div className="absolute right-6 top-6 h-16 w-16 rounded-full bg-[#00c2b8]/10 blur-xl" />
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#154f54]">
+                Sobre nosotros
+              </h2>
+              <p className="mt-4 text-sm sm:text-base leading-relaxed text-gray-600">
+                Nos especializamos en la fabricación e instalación de portones automáticos y manuales. Combinamos materiales de primera calidad, terminaciones prolijas y atención personalizada en cada etapa del proyecto.
+              </p>
+
+              <div className="mt-6 grid grid-cols-2 gap-3">
+                {[
+                  { value: "100%", label: "a medida" },
+                  { value: "4-6h", label: "instalación" },
+                ].map((stat, index) => (
+                  <motion.div
+                    key={stat.label}
+                    initial={{ opacity: 0, y: 14 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.12 * index, duration: 0.4 }}
+                    className="rounded-xl bg-gray-50 p-3 text-center ring-1 ring-gray-100"
+                  >
+                    <div className="text-lg sm:text-xl font-extrabold text-[#154f54]">{stat.value}</div>
+                    <div className="mt-1 text-[11px] sm:text-xs font-medium uppercase tracking-wide text-gray-400">{stat.label}</div>
+                  </motion.div>
+                ))}
+              </div>
+
+              <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                {[
+                  { icon: Award, text: "Terminaciones prolijas" },
+                  { icon: Clock, text: "Proceso coordinado" },
+                  { icon: MapPin, text: "Córdoba y alrededores" },
+                ].map((item) => {
+                  const Icon = item.icon;
+
+                  return (
+                    <motion.div
+                      key={item.text}
+                      whileHover={{ y: -3 }}
+                      className="flex items-center gap-2 rounded-xl border border-gray-100 bg-white p-3 text-xs font-semibold text-gray-600 shadow-sm"
+                    >
+                      <span className="grid h-8 w-8 shrink-0 place-content-center rounded-full bg-[#e6f3f4] text-[#154f54]">
+                        <Icon size={16} />
+                      </span>
+                      {item.text}
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* ===== FOOTER ===== */}
-      <footer className="mt-0">
-        <div className="bg-gradient-to-b from-[#3a3f45] to-[#2b2f35] text-white">
-          <div className="container mx-auto max-w-7xl px-5 sm:px-6 py-10 sm:py-14">
-            <div className="grid gap-10 sm:gap-12 md:grid-cols-3">
+      <Footer navItems={NAV_ITEMS} />
 
-              {/* Col 1: Logo + descripción */}
-              <div>
-                <div className="flex items-center gap-3">
-                  <img
-                    src="/logo2.png"
-                    alt="Docta Portones"
-                    className="h-12 sm:h-14 md:h-16 w-auto"
-                    style={{
-                      minWidth: "120px",
-                      /* Elimina el fondo negro del logo */
-                      filter: "brightness(0) invert(1)",
-                    }}
-                  />
-                </div>
-                <p className="mt-5 text-sm leading-relaxed text-white/70 max-w-sm">
-                  Fabricación e instalación de portones automáticos y manuales.
-                  Productos que combinan diseño, seguridad y terminaciones de calidad.
-                </p>
-
-                {/* Redes mobile-friendly */}
-                <div className="mt-6 flex items-center gap-4">
-                  <a href="https://www.instagram.com/docta.portones/" target="_blank" rel="noreferrer" className="text-white/60 hover:text-white transition" aria-label="Instagram">
-                    <Instagram size={18} />
-                  </a>
-                  <a href="https://facebook.com" target="_blank" rel="noreferrer" className="text-white/60 hover:text-white transition" aria-label="Facebook">
-                    <Facebook size={18} />
-                  </a>
-                  <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-white/60 hover:text-white transition" aria-label="LinkedIn">
-                    <Linkedin size={18} />
-                  </a>
-                </div>
-              </div>
-
-              {/* Col 2: Links */}
-              <div>
-                <h4 className="text-xs font-extrabold tracking-widest uppercase text-white/50">Links de interés</h4>
-                <ul className="mt-5 space-y-3 text-sm">
-                  {[
-                    { id: "inicio", label: "Inicio" },
-                    { id: "productos", label: "Productos" },
-                    { id: "Fabricación", label: "Fabricación" },
-                    { id: "pasos", label: "Proceso" },
-                    { id: "faq", label: "Preguntas frecuentes" },
-                    { id: "nosotros", label: "Nosotros" },
-                  ].map((l) => (
-                    <li key={l.id}>
-                      <a
-                        href={`#${l.id}`}
-                        className="group inline-flex items-center gap-3 text-white/75 hover:text-white transition"
-                      >
-                        <span className="grid h-6 w-6 place-content-center rounded-full bg-white/10 ring-1 ring-white/15 group-hover:bg-[#154f54]/60 group-hover:ring-[#00c2b8]/60 transition text-[#00c2b8] group-hover:text-white text-sm">
-                          ›
-                        </span>
-                        {l.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Col 3: Contacto */}
-              <div>
-                <h4 className="text-xs font-extrabold tracking-widest uppercase text-white/50">Información de contacto</h4>
-
-                <div className="mt-5 space-y-4 text-sm text-white/70">
-                  <div className="flex items-start gap-3">
-                    <span className="mt-0.5 text-[#00c2b8]">☎</span>
-                    <a className="hover:text-white transition" href="tel:+5493518791565">
-                      +54 9 351 879 1565
-                    </a>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <span className="mt-0.5 text-[#00c2b8]">📍</span>
-                    <div>
-                      <div className="font-semibold text-white/90">Paraguay 396</div>
-                      <div className="text-white/60 text-xs mt-0.5">Córdoba Capital, Argentina</div>
-                      <div className="text-white/55 text-xs">Instalaciones en ciudad y alrededores</div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <span className="mt-0.5 text-[#00c2b8]">✉</span>
-                    <a className="hover:text-white transition break-all" href="mailto:doctaportones@gmail.com">
-                      doctaportones@gmail.com
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-10 sm:mt-12 pt-6 sm:pt-8 border-t border-white/10 text-center text-xs text-white/40">
-              © {new Date().getFullYear()} Docta Portones — Todos los derechos reservados.
-            </div>
-          </div>
-        </div>
-      </footer>
-
-      {/* ===== BOTÓN WHATSAPP FLOTANTE (circular) ===== */}
-      <a
-        href={WHATSAPP}
-        target="_blank"
-        rel="noreferrer"
-        className="
-          fixed bottom-5 right-5 sm:bottom-6 sm:right-6
-          h-14 w-14
-          rounded-full
-          bg-[#25D366]
-          text-white
-          shadow-[0_4px_20px_rgba(37,211,102,0.45)]
-          hover:scale-110 hover:shadow-[0_6px_28px_rgba(37,211,102,0.55)]
-          transition-all duration-300
-          flex items-center justify-center
-          z-40
-        "
-        aria-label="WhatsApp"
-      >
-        <MessageCircle size={26} strokeWidth={1.8} />
-      </a>
+      <FloatingWhatsApp href={WHATSAPP} />
     </div>
   );
 }
