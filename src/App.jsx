@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Award, Clock, MapPin } from "lucide-react";
+import { Award, ChevronLeft, ChevronRight, Clock, MapPin } from "lucide-react";
 import { AnimatedFAQ } from "./components/AnimatedFAQ";
 import { Footer } from "./components/Footer";
 import { FloatingWhatsApp } from "./components/FloatingWhatsApp";
@@ -28,6 +28,8 @@ const fadeIn = {
 
 export default function App() {
   const videoRef = useRef(null);
+  const productTabsRef = useRef(null);
+  const productTabRefs = useRef({});
   const [fabPlaying, setFabPlaying] = useState(false);
 
   const handlePlayFab = async () => {
@@ -44,13 +46,36 @@ export default function App() {
   const [activeProduct, setActiveProduct] = useState(PRODUCT_TITLES[0]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
-  function selectProduct(title) {
+  useEffect(() => {
+    const activeTab = productTabRefs.current[activeProduct];
+    if (!activeTab || window.innerWidth >= 640) return;
+
+    activeTab.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "center",
+    });
+  }, [activeProduct]);
+
+  function selectProduct(title, openCarousel = false) {
     setActiveProduct(title);
     requestAnimationFrame(() => {
       document
         .getElementById("producto-galeria")
         ?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
+
+    if (openCarousel) {
+      setSelectedImageIndex(0);
+    }
+  }
+
+  function goToAdjacentProduct(direction) {
+    const currentIndex = PRODUCT_TITLES.indexOf(activeProduct);
+    const nextIndex =
+      (currentIndex + direction + PRODUCT_TITLES.length) % PRODUCT_TITLES.length;
+
+    setActiveProduct(PRODUCT_TITLES[nextIndex]);
   }
 
   const openModal = (index) => {
@@ -132,22 +157,22 @@ export default function App() {
           {/* Mobile: grid 2 columnas / Desktop: bento grid */}
           <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4 md:auto-rows-[300px]">
             <div className="col-span-2 md:col-span-1 md:row-span-2 min-h-[200px] rounded-xl">
-              <ProductCard c={PRODUCT_CARDS[0]} onSelect={selectProduct} />
+              <ProductCard c={PRODUCT_CARDS[0]} onSelect={(title) => selectProduct(title, true)} />
             </div>
             <div className="col-span-1 min-h-[160px] md:min-h-0 md:col-span-1 md:row-span-1 ">
-              <ProductCard c={PRODUCT_CARDS[1]} onSelect={selectProduct} />
+              <ProductCard c={PRODUCT_CARDS[1]} onSelect={(title) => selectProduct(title, true)} />
             </div>
             <div className="col-span-1 min-h-[160px] md:min-h-0 md:col-span-2 md:row-span-1">
-              <ProductCard c={PRODUCT_CARDS[2]} onSelect={selectProduct} />
+              <ProductCard c={PRODUCT_CARDS[2]} onSelect={(title) => selectProduct(title, true)} />
             </div>
             <div className="col-span-1 min-h-[160px] md:min-h-0 md:col-span-1 md:row-span-1">
-              <ProductCard c={PRODUCT_CARDS[3]} onSelect={selectProduct} />
+              <ProductCard c={PRODUCT_CARDS[3]} onSelect={(title) => selectProduct(title, true)} />
             </div>
             <div className="col-span-1 min-h-[160px] md:min-h-0 md:col-span-1 md:row-span-1">
-              <ProductCard c={PRODUCT_CARDS[4]} onSelect={selectProduct} />
+              <ProductCard c={PRODUCT_CARDS[4]} onSelect={(title) => selectProduct(title, true)} />
             </div>
             <div className="col-span-2 md:col-span-1 md:row-span-1 min-h-[160px]">
-              <ProductCard c={PRODUCT_CARDS[5]} onSelect={selectProduct} />
+              <ProductCard c={PRODUCT_CARDS[5]} onSelect={(title) => selectProduct(title, true)} />
             </div>
           </div>
         </div>
@@ -164,25 +189,75 @@ export default function App() {
       >
         <div className="container px-4 sm:px-6 mx-auto max-w-7xl">
           {/* Tabs — scroll horizontal en mobile */}
-          <div className="flex gap-2 overflow-x-auto pb-2 sm:flex-wrap sm:justify-center sm:overflow-visible hide-scrollbar">
-            {PRODUCT_TITLES.map((t) => {
-              const active = t === activeProduct;
-              return (
-                <button
-                  key={t}
-                  type="button"
-                  onClick={() => setActiveProduct(t)}
-                  className={[
-                    "px-4 py-2.5 text-sm font-semibold transition ring-1 whitespace-nowrap rounded-md flex-shrink-0",
-                    active
-                      ? "bg-[#154f54] text-white ring-[#154f54] shadow-sm"
-                      : "bg-white text-gray-700 ring-gray-200 hover:ring-[#154f54]/40 hover:bg-gray-50",
-                  ].join(" ")}
-                >
-                  {t}
-                </button>
-              );
-            })}
+          <div className="relative -mx-4 px-9 sm:mx-0 sm:px-0">
+            <div className="pointer-events-none absolute bottom-3 left-0 top-0 z-10 w-7 bg-gradient-to-r from-white to-transparent sm:hidden" />
+            <div className="pointer-events-none absolute bottom-3 right-0 top-0 z-10 w-7 bg-gradient-to-l from-white to-transparent sm:hidden" />
+
+            <button
+              type="button"
+              onClick={() => goToAdjacentProduct(-1)}
+              className="absolute left-2 top-1/2 z-20 grid h-7 w-7 -translate-y-1/2 place-content-center rounded-full bg-white/95 text-[#154f54] shadow-sm ring-1 ring-gray-200 backdrop-blur sm:hidden"
+              aria-label="Ver productos anteriores"
+            >
+              <ChevronLeft size={15} strokeWidth={2.5} />
+            </button>
+
+            <div
+              ref={productTabsRef}
+              className="product-tabs-scroll hide-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-1 pb-3 pt-1 sm:flex-wrap sm:justify-center sm:overflow-visible sm:px-0"
+            >
+              {PRODUCT_TITLES.map((t, index) => {
+                const active = t === activeProduct;
+                return (
+                  <motion.button
+                    key={t}
+                    ref={(node) => {
+                      productTabRefs.current[t] = node;
+                    }}
+                    type="button"
+                    onClick={() => setActiveProduct(t)}
+                    aria-pressed={active}
+                    whileHover={{ y: -3, scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                    className={[
+                      "group relative min-w-[172px] snap-center overflow-hidden rounded-2xl px-4 py-3 text-left text-sm font-bold transition-all duration-300 ring-1 sm:min-w-[172px]",
+                      t === "Frentes completos" ? "min-w-[205px] sm:min-w-[205px]" : "",
+                      active
+                        ? "bg-[#154f54] text-white ring-[#154f54] shadow-[0_12px_28px_rgba(21,79,84,0.24)]"
+                        : "bg-gray-50 text-gray-700 ring-gray-200 hover:bg-white hover:ring-[#154f54]/35",
+                    ].join(" ")}
+                  >
+                    <span className="relative z-10 flex items-center justify-between gap-4 whitespace-nowrap">
+                      <span>{t}</span>
+                      <span
+                        className={[
+                          "text-[10px] font-extrabold leading-none transition",
+                          active ? "text-[#00c2b8]" : "text-gray-400",
+                        ].join(" ")}
+                      >
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                    </span>
+                    <span
+                      className={[
+                        "absolute inset-x-4 bottom-2 h-1 rounded-full transition-all duration-300",
+                        active ? "bg-[#00c2b8] opacity-100" : "bg-transparent opacity-0",
+                      ].join(" ")}
+                    />
+                  </motion.button>
+                );
+              })}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => goToAdjacentProduct(1)}
+              className="absolute right-2 top-1/2 z-20 grid h-7 w-7 -translate-y-1/2 place-content-center rounded-full bg-white/95 text-[#154f54] shadow-sm ring-1 ring-gray-200 backdrop-blur sm:hidden"
+              aria-label="Ver más productos"
+            >
+              <ChevronRight size={15} strokeWidth={2.5} />
+            </button>
           </div>
 
           <div key={activeProduct} className="mt-6 sm:mt-10 grid gap-3 sm:gap-4 grid-cols-2 sm:grid-cols-2 md:grid-cols-3">
@@ -246,7 +321,6 @@ export default function App() {
                   onPlay={() => setFabPlaying(true)}
                   onPause={() => setFabPlaying(false)}
                 >
-                  <source src="/video/fabricacion-optimized.mp4" type="video/mp4" />
                   <source src="/video/fabricacion.mp4" type="video/mp4" />
                 </video>
 
@@ -423,16 +497,16 @@ export default function App() {
       <AnimatedFAQ />
 
       {/* ===== NOSOTROS ===== */}
-      <section id="nosotros" className="relative overflow-hidden py-14 sm:py-20 bg-gray-50">
+      <section id="nosotros" className="relative overflow-hidden py-10 sm:py-20 bg-gray-50">
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#154f54]/20 to-transparent" />
         <div className="container px-4 sm:px-6 mx-auto max-w-7xl">
-          <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-stretch">
+          <div className="grid gap-5 sm:gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-stretch">
             <motion.div
               initial={{ opacity: 0, x: -24 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.25 }}
               transition={{ duration: 0.65, ease: "easeOut" }}
-              className="relative min-h-[420px] overflow-hidden rounded-2xl shadow-[0_18px_50px_rgba(15,59,64,0.18)] ring-1 ring-black/10"
+              className="relative hidden min-h-[270px] overflow-hidden rounded-2xl shadow-[0_18px_50px_rgba(15,59,64,0.18)] ring-1 ring-black/10 sm:block sm:min-h-[420px]"
             >
               <picture>
                 <source srcSet={toWebp("/img/fabricacion/1.jpg")} type="image/webp" />
@@ -450,7 +524,7 @@ export default function App() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.25, duration: 0.5 }}
-                className="absolute bottom-5 left-5 right-5 rounded-2xl bg-[#062f32]/45 p-5 text-white shadow-2xl backdrop-blur-md ring-1 ring-white/25"
+                className="absolute bottom-3 left-3 right-3 rounded-2xl bg-[#062f32]/45 p-4 text-white shadow-2xl backdrop-blur-md ring-1 ring-white/25 sm:bottom-5 sm:left-5 sm:right-5 sm:p-5"
               >
                 <div className="inline-flex rounded-full bg-white/12 px-3 py-1 text-xs font-bold uppercase tracking-wide text-[#00c2b8] ring-1 ring-white/15">
                   Trabajo a medida
@@ -464,7 +538,7 @@ export default function App() {
                   typingSpeed={28}
                   deletingSpeed={16}
                   pauseDuration={4450}
-                  className="mt-3 block min-h-[54px] text-base font-semibold leading-relaxed text-white/90 sm:text-lg"
+                  className="mt-3 block min-h-[44px] text-sm font-semibold leading-relaxed text-white/90 sm:min-h-[54px] sm:text-lg"
                 />
               </motion.div>
             </motion.div>
@@ -474,17 +548,20 @@ export default function App() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.25 }}
               transition={{ duration: 0.65, ease: "easeOut" }}
-              className="relative flex min-h-[420px] flex-col justify-center rounded-2xl bg-white p-5 shadow-sm ring-1 ring-gray-100 sm:p-7 lg:p-8"
+              className="relative flex flex-col justify-center rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-100 sm:min-h-[420px] sm:p-7 lg:p-8"
             >
               <div className="absolute right-6 top-6 h-16 w-16 rounded-full bg-[#00c2b8]/10 blur-xl" />
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#154f54]">
                 Sobre nosotros
               </h2>
-              <p className="mt-4 text-sm sm:text-base leading-relaxed text-gray-600">
+              <p className="mt-3 text-sm leading-relaxed text-gray-600 sm:hidden">
+                Fabricamos e instalamos portones a medida, con materiales de calidad y terminaciones prolijas.
+              </p>
+              <p className="mt-4 hidden text-sm leading-relaxed text-gray-600 sm:block sm:text-base">
                 Nos especializamos en la fabricación e instalación de portones automáticos y manuales. Combinamos materiales de primera calidad, terminaciones prolijas y atención personalizada en cada etapa del proyecto.
               </p>
 
-              <div className="mt-6 grid grid-cols-2 gap-3">
+              <div className="mt-4 grid grid-cols-2 gap-2 sm:mt-6 sm:gap-3">
                 {[
                   { value: "100%", label: "a medida" },
                   { value: "4-6h", label: "instalación" },
@@ -495,15 +572,15 @@ export default function App() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.12 * index, duration: 0.4 }}
-                    className="rounded-xl bg-gray-50 p-3 text-center ring-1 ring-gray-100"
+                    className="rounded-xl bg-gray-50 p-2.5 text-center ring-1 ring-gray-100 sm:p-3"
                   >
-                    <div className="text-lg sm:text-xl font-extrabold text-[#154f54]">{stat.value}</div>
+                    <div className="text-base sm:text-xl font-extrabold text-[#154f54]">{stat.value}</div>
                     <div className="mt-1 text-[11px] sm:text-xs font-medium uppercase tracking-wide text-gray-400">{stat.label}</div>
                   </motion.div>
                 ))}
               </div>
 
-              <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              <div className="mt-4 grid gap-2 sm:mt-6 sm:grid-cols-3 sm:gap-3">
                 {[
                   { icon: Award, text: "Terminaciones prolijas" },
                   { icon: Clock, text: "Proceso coordinado" },
@@ -515,7 +592,7 @@ export default function App() {
                     <motion.div
                       key={item.text}
                       whileHover={{ y: -3 }}
-                      className="flex items-center gap-2 rounded-xl border border-gray-100 bg-white p-3 text-xs font-semibold text-gray-600 shadow-sm"
+                      className="flex items-center gap-2 rounded-xl border border-gray-100 bg-white p-2.5 text-xs font-semibold text-gray-600 shadow-sm sm:p-3"
                     >
                       <span className="grid h-8 w-8 shrink-0 place-content-center rounded-full bg-[#e6f3f4] text-[#154f54]">
                         <Icon size={16} />
