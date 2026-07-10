@@ -8,6 +8,7 @@ import { GalleryImage } from "./components/GalleryImage";
 import { GalleryModal } from "./components/GalleryModal";
 import { HeroSlide } from "./components/HeroSlide";
 import { Navbar } from "./components/Navbar";
+import { OpeningGate } from "./components/OpeningGate";
 import { ProductCard } from "./components/ProductCard";
 import { ProTextType } from "./components/ProTextType";
 import {
@@ -90,6 +91,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 text-gray-900">
+      <OpeningGate />
       <Navbar navItems={NAV_ITEMS} whatsappUrl={WHATSAPP} />
 
       {/* HERO */}

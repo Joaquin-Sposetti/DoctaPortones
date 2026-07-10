@@ -10,6 +10,29 @@ html, body, #root {
   height: 100%;
 }
 
+html {
+  scrollbar-color: rgba(0, 194, 184, 0.78) rgba(6, 47, 50, 0.08);
+  scrollbar-width: thin;
+}
+
+body::-webkit-scrollbar {
+  width: 9px;
+}
+
+body::-webkit-scrollbar-track {
+  background: rgba(6, 47, 50, 0.06);
+}
+
+body::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(21, 79, 84, 0.86), rgba(0, 194, 184, 0.78));
+  border: 2px solid rgba(245, 248, 248, 0.9);
+  border-radius: 999px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(21, 79, 84, 1), rgba(0, 194, 184, 0.92));
+}
+
 .section {
   @apply py-20 md:py-28;
 }
