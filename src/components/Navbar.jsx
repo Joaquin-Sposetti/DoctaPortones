@@ -6,6 +6,21 @@ import { GlassyButton } from "./GlassyButton";
 export function Navbar({ navItems, whatsappUrl }) {
   const [open, setOpen] = useState(false);
 
+  const handleOpenMenu = (event) => {
+    const ignoreUntil =
+      typeof window !== "undefined" ? window.__doctaGalleryClosingUntil || 0 : 0;
+
+    if (Date.now() < ignoreUntil) {
+      event.preventDefault();
+      event.stopPropagation();
+      event.currentTarget.blur();
+      return;
+    }
+
+    event.currentTarget.blur();
+    setOpen(true);
+  };
+
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/90 backdrop-blur-lg shadow-[0_2px_8px_rgba(0,0,0,0.03)]">
       <div className="container flex h-20 items-center justify-between px-10 mx-auto max-w-7xl">
@@ -15,7 +30,9 @@ export function Navbar({ navItems, whatsappUrl }) {
         >
           <img
             src="/icon.png"
-            alt="Docta Portones"
+            alt="DoctaPortones"
+            width="777"
+            height="777"
             className="h-12 w-auto object-contain"
             style={{ minWidth: "50px" }}
           />
@@ -52,6 +69,7 @@ export function Navbar({ navItems, whatsappUrl }) {
             target="_blank"
             className="grid h-10 w-10 place-content-center rounded-full text-gray-500 transition hover:bg-[#e6f3f4] hover:text-[#154f54]"
             rel="noreferrer"
+            aria-label="Instagram de DoctaPortones"
             whileHover={{ y: -2, rotate: -4 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -62,12 +80,13 @@ export function Navbar({ navItems, whatsappUrl }) {
             href={whatsappUrl}
             label="Llamar"
             icon={Phone}
+            ariaLabel="Contactar a DoctaPortones por WhatsApp"
           />
         </div>
 
         <button
-          className="md:hidden p-2 hover:bg-gray-100"
-          onClick={() => setOpen(true)}
+          className="md:hidden bg-transparent p-2 text-gray-700 outline-none transition-colors [-webkit-tap-highlight-color:transparent] hover:bg-transparent focus:bg-transparent active:bg-transparent"
+          onClick={handleOpenMenu}
           aria-label="Abrir menú"
         >
           <Menu />
@@ -95,8 +114,10 @@ export function Navbar({ navItems, whatsappUrl }) {
                 <div className="flex items-center gap-3">
                   <img
                     src="/icon.png"
+                    width="777"
+                    height="777"
                     className="h-9 w-auto object-contain"
-                    alt="Docta Portones"
+                    alt="DoctaPortones"
                   />
                   <span className="font-bold text-[#154f54]">Menú</span>
                 </div>
@@ -132,6 +153,7 @@ export function Navbar({ navItems, whatsappUrl }) {
                   label="Llamar"
                   icon={Phone}
                   className="w-full justify-center"
+                  ariaLabel="Llamar a DoctaPortones"
                 />
               </div>
             </motion.div>

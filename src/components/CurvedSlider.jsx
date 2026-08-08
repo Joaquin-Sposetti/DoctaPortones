@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import React, { startTransition, useEffect, useState } from "react";
+import React, { startTransition, useEffect, useRef, useState } from "react";
 
 const clampIndex = (index, length) => ((index % length) + length) % length;
 
@@ -14,6 +14,7 @@ export function CurvedSlider({
   imageAspectRatio = "cover",
   mobileMarqueeSpeed = 1,
   enableKeyboardNavigation = true,
+  resetSignal = 0,
   titleFont = {
     fontSize: "32px",
     fontWeight: 700,
@@ -25,10 +26,29 @@ export function CurvedSlider({
 }) {
   const [currentIndex, setCurrentIndex] = useState(clampIndex(initialIndex, cards.length));
   const [isMobile, setIsMobile] = useState(false);
+  const [zoomed, setZoomed] = useState(false);
+  const [zoomOrigin, setZoomOrigin] = useState("center center");
+  const imageWasDraggedRef = useRef(false);
 
   useEffect(() => {
     setCurrentIndex(clampIndex(initialIndex, cards.length));
+    setZoomed(false);
+    setZoomOrigin("center center");
+    imageWasDraggedRef.current = false;
   }, [initialIndex, cards.length]);
+
+  useEffect(() => {
+    setZoomed(false);
+    setZoomOrigin("center center");
+    imageWasDraggedRef.current = false;
+  }, [resetSignal]);
+
+  useEffect(() => {
+    if (zoomed) return;
+
+    imageWasDraggedRef.current = false;
+    setZoomOrigin("center center");
+  }, [zoomed]);
 
   useEffect(() => {
     if (typeof window === "undefined") return undefined;
@@ -44,13 +64,25 @@ export function CurvedSlider({
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  useEffect(() => {
+    return () => {
+      imageWasDraggedRef.current = false;
+    };
+  }, []);
+
   const handlePrevious = () => {
+    setZoomed(false);
+    setZoomOrigin("center center");
+    imageWasDraggedRef.current = false;
     startTransition(() => {
       setCurrentIndex((prev) => (prev === 0 ? cards.length - 1 : prev - 1));
     });
   };
 
   const handleNext = () => {
+    setZoomed(false);
+    setZoomOrigin("center center");
+    imageWasDraggedRef.current = false;
     startTransition(() => {
       setCurrentIndex((prev) => (prev === cards.length - 1 ? 0 : prev + 1));
     });
@@ -77,9 +109,19 @@ export function CurvedSlider({
   }, [enableKeyboardNavigation, currentIndex, isMobile]);
 
   const handleDragEnd = (_, info) => {
+    if (zoomed) return;
     const swipe = info.offset.x + info.velocity.x * 0.2;
     if (swipe < -70) handleNext();
     if (swipe > 70) handlePrevious();
+  };
+
+  const handleZoomMove = (event, isCenter) => {
+    if (!isCenter || !zoomed || isMobile) return;
+
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * 100;
+    const y = ((event.clientY - rect.top) / rect.height) * 100;
+    setZoomOrigin(`${Math.max(0, Math.min(100, x))}% ${Math.max(0, Math.min(100, y))}%`);
   };
 
   const getCardStyle = (index) => {
@@ -150,15 +192,17 @@ export function CurvedSlider({
       </button>
 
         <motion.div
-          drag="x"
+          drag={zoomed ? false : "x"}
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={0.16}
           onDragEnd={handleDragEnd}
           className="relative h-[78%] min-h-[360px] w-[74%] touch-pan-y md:h-[90%] md:min-h-[600px] md:w-[58%] md:min-w-[760px]"
+          style={{ touchAction: zoomed ? "none" : "pan-y" }}
         >
           <AnimatePresence initial={false}>
             {cards.map((card, index) => {
               const cardStyle = getCardStyle(index);
+              const isCenter = index === currentIndex;
               const isVisible =
                 Math.abs(index - currentIndex) <= 1 ||
                 (currentIndex === 0 && index === cards.length - 1) ||
@@ -175,25 +219,92 @@ export function CurvedSlider({
                   animate={cardStyle}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
-                  className="absolute left-1/2 top-1/2 flex h-full w-full flex-col gap-3"
+                  className={[
+                    "absolute left-1/2 top-1/2 flex h-full w-full flex-col gap-3",
+                    isCenter && zoomed ? "z-30" : "",
+                  ].join(" ")}
                 >
                   <button
                     type="button"
-                    onClick={() => index !== currentIndex && setCurrentIndex(index)}
-                    className="relative block h-full w-full overflow-hidden bg-transparent focus:outline-none"
+                    onClick={() => {
+                      if (imageWasDraggedRef.current) return;
+
+                      if (index !== currentIndex) {
+                        setZoomed(false);
+                        setZoomOrigin("center center");
+                        imageWasDraggedRef.current = false;
+                        setCurrentIndex(index);
+                        return;
+                      }
+
+                      setZoomed((value) => {
+                        if (value) {
+                          setZoomOrigin("center center");
+                          imageWasDraggedRef.current = false;
+                        }
+                        return !value;
+                      });
+                    }}
+                    onMouseMove={(event) => handleZoomMove(event, isCenter)}
+                    className={[
+                      "relative block h-full w-full overflow-hidden bg-transparent focus:outline-none",
+                      index === currentIndex ? "cursor-zoom-in" : "cursor-pointer",
+                      isCenter && zoomed ? "cursor-zoom-out" : "",
+                    ].join(" ")}
                     style={{ borderRadius: cardBorderRadius }}
-                    aria-label={`Ver imagen ${index + 1}`}
+                    aria-label={
+                      index === currentIndex
+                        ? zoomed
+                          ? "Quitar zoom"
+                          : "Hacer zoom"
+                        : `Ver imagen ${index + 1}`
+                    }
                   >
-                    <img
+                    <motion.img
+                      key={`${cardImage.src}-${isCenter && zoomed ? "zoomed" : "normal"}`}
                       src={cardImage.src}
                       alt={cardImage.alt || "Imagen"}
-                      className="block h-full w-full"
+                      className={[
+                        "block h-full w-full",
+                        isCenter && zoomed && isMobile ? "cursor-grab active:cursor-grabbing" : "",
+                      ].join(" ")}
+                      drag={isCenter && zoomed && isMobile}
+                      dragConstraints={{ left: -170, right: 170, top: -170, bottom: 170 }}
+                      dragElastic={0.08}
+                      dragMomentum={false}
+                      onDragStart={() => {
+                        imageWasDraggedRef.current = true;
+                      }}
+                      onDragEnd={() => {
+                        window.setTimeout(() => {
+                          imageWasDraggedRef.current = false;
+                        }, 120);
+                      }}
+                      onPointerUp={() => {
+                        window.setTimeout(() => {
+                          imageWasDraggedRef.current = false;
+                        }, 120);
+                      }}
+                      onPointerCancel={() => {
+                        imageWasDraggedRef.current = false;
+                      }}
+                      animate={{
+                        scale: isCenter && zoomed ? (isMobile ? 1.95 : 2.25) : 1,
+                      }}
+                      transition={{ type: "spring", stiffness: 180, damping: 24 }}
                       style={{
                         objectFit: imageAspectRatio,
                         borderRadius: "inherit",
+                        transformOrigin: isCenter && zoomed ? zoomOrigin : "center center",
+                        touchAction: isCenter && zoomed && isMobile ? "none" : "auto",
                       }}
                       draggable="false"
                     />
+                    {isCenter && (
+                      <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/55 px-3 py-1.5 text-[11px] font-semibold text-white/85 backdrop-blur-md">
+                        {zoomed ? "Tocar para alejar" : "Tocar para ampliar"}
+                      </div>
+                    )}
                   </button>
 
                   {showTitles && card.title && (

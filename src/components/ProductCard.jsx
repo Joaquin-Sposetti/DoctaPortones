@@ -39,7 +39,9 @@ export function ProductCard({ c, onSelect }) {
         <source srcSet={webpSrc} type="image/webp" />
         <img
           src={c.img}
-          alt={c.title}
+          alt={c.alt || c.title}
+          width={c.width}
+          height={c.height}
           className={`
             absolute inset-0 z-0 h-full w-full object-cover rounded-lg
             transition-all duration-700 ease-out

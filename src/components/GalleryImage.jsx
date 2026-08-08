@@ -9,6 +9,7 @@ export function GalleryImage({ src, alt, onClick }) {
   return (
     <button
       onClick={onClick}
+      aria-label={`Abrir galería: ${alt}`}
       className="
         relative overflow-hidden bg-gray-200 ring-1 ring-gray-200
         shadow-sm hover:shadow-lg transition-all duration-300

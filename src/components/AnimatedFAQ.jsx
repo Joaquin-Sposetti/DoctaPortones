@@ -16,6 +16,10 @@ const faqItems = [
     a: "En muchos casos sí. Revisamos peso, estado, apertura y espacio disponible para recomendar el motor correcto.",
   },
   {
+    q: "¿Instalan motores y hacen servicio técnico?",
+    a: "Sí. Instalamos motores para portones y revisamos el sistema para recomendar la automatización o solución técnica adecuada.",
+  },
+  {
     q: "¿Cuánto demora la fabricación?",
     a: "El plazo habitual de fabricación es de 25 a 30 días, dependiendo del modelo, medidas y terminación elegida.",
   },

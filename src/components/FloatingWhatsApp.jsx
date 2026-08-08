@@ -8,7 +8,7 @@ export function FloatingWhatsApp({ href }) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      aria-label="WhatsApp"
+      aria-label="Contactar a DoctaPortones por WhatsApp"
       className="
         group fixed bottom-5 right-5 z-40
         inline-flex h-14 items-center overflow-hidden rounded-full

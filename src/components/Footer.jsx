@@ -11,7 +11,9 @@ export function Footer({ navItems }) {
               <div className="flex items-center gap-3">
                 <img
                   src="/logo2.png"
-                  alt="Docta Portones"
+                  alt="DoctaPortones"
+                  width="777"
+                  height="777"
                   className="h-12 sm:h-14 md:h-16 w-auto"
                   style={{
                     minWidth: "120px",
@@ -30,7 +32,7 @@ export function Footer({ navItems }) {
                   target="_blank"
                   rel="noreferrer"
                   className="text-white/60 hover:text-white transition"
-                  aria-label="Instagram"
+                  aria-label="Instagram de DoctaPortones"
                 >
                   <Instagram size={18} />
                 </a>
@@ -66,7 +68,11 @@ export function Footer({ navItems }) {
               <div className="mt-5 space-y-4 text-sm text-white/70">
                 <div className="flex items-start gap-3">
                   <span className="mt-0.5 text-[#00c2b8]">Tel.</span>
-                  <a className="hover:text-white transition" href="tel:+5493518791565">
+                  <a
+                    className="hover:text-white transition"
+                    href="tel:+5493518791565"
+                    aria-label="Llamar a DoctaPortones"
+                  >
                     +54 9 351 879 1565
                   </a>
                 </div>
@@ -89,6 +95,7 @@ export function Footer({ navItems }) {
                   <a
                     className="hover:text-white transition break-all"
                     href="mailto:doctaportones@gmail.com"
+                    aria-label="Enviar email a DoctaPortones"
                   >
                     doctaportones@gmail.com
                   </a>

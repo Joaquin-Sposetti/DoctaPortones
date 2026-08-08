@@ -10,12 +10,48 @@ export const NAV_ITEMS = [
 ];
 
 export const PRODUCT_CARDS = [
-  { title: "Levadizos", img: "/img/cards/levadizos.jpg" },
-  { title: "Corredizos", img: "/img/cards/corredizos.jpg" },
-  { title: "Frentes completos", img: "/img/cards/frentes.jpg" },
-  { title: "Batientes", img: "/img/cards/batientes.jpg" },
-  { title: "Puertas", img: "/img/cards/puertas.jpg" },
-  { title: "Paños fijos", img: "/img/cards/panios.jpg" },
+  {
+    title: "Levadizos",
+    img: "/img/cards/levadizos.jpg",
+    alt: "Portón levadizo automático fabricado por DoctaPortones",
+    width: 4080,
+    height: 3060,
+  },
+  {
+    title: "Corredizos",
+    img: "/img/cards/corredizos.jpg",
+    alt: "Portón corredizo instalado por DoctaPortones",
+    width: 2423,
+    height: 3071,
+  },
+  {
+    title: "Frentes completos",
+    img: "/img/cards/frentes.jpg",
+    alt: "Frente completo con portón y puerta a medida",
+    width: 4080,
+    height: 3060,
+  },
+  {
+    title: "Batientes",
+    img: "/img/cards/batientes.jpg",
+    alt: "Portón batiente metálico para vivienda",
+    width: 4080,
+    height: 3060,
+  },
+  {
+    title: "Puertas",
+    img: "/img/cards/puertas.jpg",
+    alt: "Puerta metálica fabricada a medida",
+    width: 2769,
+    height: 2460,
+  },
+  {
+    title: "Paños fijos",
+    img: "/img/cards/panios.jpg",
+    alt: "Paños fijos metálicos para frente de vivienda",
+    width: 4080,
+    height: 3060,
+  },
 ];
 
 export const PRODUCT_TITLES = PRODUCT_CARDS.map((p) => p.title);

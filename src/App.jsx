@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Award, ChevronLeft, ChevronRight, Clock, MapPin } from "lucide-react";
 import { AnimatedFAQ } from "./components/AnimatedFAQ";
+import { CustomerReviews } from "./components/CustomerReviews";
 import { Footer } from "./components/Footer";
 import { FloatingWhatsApp } from "./components/FloatingWhatsApp";
 import { GalleryImage } from "./components/GalleryImage";
@@ -27,6 +28,56 @@ const fadeIn = {
   transition: { duration: 0.6 },
 };
 
+const HERO_SLIDES = [
+  {
+    src: "/img/proyecto1.jpeg",
+    alt: "Portón automático instalado en una vivienda de Córdoba",
+    width: 1600,
+    height: 1066,
+  },
+  {
+    src: "/img/proyecto2.jpeg",
+    alt: "Portón levadizo automático fabricado a medida",
+    width: 1600,
+    height: 1066,
+  },
+  {
+    src: "/img/proyecto3.jpeg",
+    alt: "Portón metálico moderno para frente de casa",
+    width: 1600,
+    height: 1066,
+  },
+  {
+    src: "/img/proyecto4.jpeg",
+    alt: "Instalación de portón residencial con terminación metálica",
+    width: 1066,
+    height: 1600,
+  },
+  {
+    src: "/img/proyecto5.jpeg",
+    alt: "Portón para cochera instalado por DoctaPortones",
+    width: 1706,
+    height: 2560,
+  },
+  {
+    src: "/img/proyecto6.jpeg",
+    alt: "Portón automático abierto en frente residencial",
+    width: 1066,
+    height: 1600,
+  },
+];
+
+function restorePageInteraction() {
+  document.body.style.cursor = "";
+  document.body.style.pointerEvents = "";
+  document.body.style.userSelect = "";
+  document.body.style.touchAction = "";
+  document.documentElement.style.cursor = "";
+  document.documentElement.style.pointerEvents = "";
+  document.documentElement.style.userSelect = "";
+  document.documentElement.style.touchAction = "";
+}
+
 export default function App() {
   const videoRef = useRef(null);
   const productTabsRef = useRef(null);
@@ -45,7 +96,7 @@ export default function App() {
   };
 
   const [activeProduct, setActiveProduct] = useState(PRODUCT_TITLES[0]);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     const activeTab = productTabRefs.current[activeProduct];
@@ -59,6 +110,8 @@ export default function App() {
   }, [activeProduct]);
 
   function selectProduct(title, openCarousel = false) {
+    restorePageInteraction();
+    setSelectedImage(null);
     setActiveProduct(title);
     requestAnimationFrame(() => {
       document
@@ -67,11 +120,13 @@ export default function App() {
     });
 
     if (openCarousel) {
-      setSelectedImageIndex(0);
+      setSelectedImage({ product: title, index: 0, openedAt: Date.now() });
     }
   }
 
   function goToAdjacentProduct(direction) {
+    restorePageInteraction();
+    setSelectedImage(null);
     const currentIndex = PRODUCT_TITLES.indexOf(activeProduct);
     const nextIndex =
       (currentIndex + direction + PRODUCT_TITLES.length) % PRODUCT_TITLES.length;
@@ -80,39 +135,40 @@ export default function App() {
   }
 
   const openModal = (index) => {
-    setSelectedImageIndex(index);
+    restorePageInteraction();
+    setSelectedImage({ product: activeProduct, index, openedAt: Date.now() });
   };
 
   const closeModal = () => {
-    setSelectedImageIndex(null);
+    restorePageInteraction();
+    setSelectedImage(null);
   };
 
-  const currentImages = PRODUCT_GALLERY[activeProduct] || [];
+  const modalImages = selectedImage ? PRODUCT_GALLERY[selectedImage.product] || [] : [];
+
+  const getGalleryAlt = (product, index) =>
+    `${product} a medida instalado por DoctaPortones - imagen ${index + 1}`;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 text-gray-900">
       <OpeningGate />
       <Navbar navItems={NAV_ITEMS} whatsappUrl={WHATSAPP} />
 
-      {/* HERO */}
-      <section
+      <main id="contenido-principal">
+        {/* HERO */}
+        <section
         id="inicio"
         className="relative h-[80vh] flex flex-col items-center justify-center overflow-hidden"
       >
         <div className="absolute inset-0 z-0">
           <div className="slideshow">
-            {[
-              "/img/proyecto1.jpeg",
-              "/img/proyecto2.jpeg",
-              "/img/proyecto3.jpeg",
-              "/img/proyecto4.jpeg",
-              "/img/proyecto5.jpeg",
-              "/img/proyecto6.jpeg",
-            ].map((src, index) => (
+            {HERO_SLIDES.map((slide, index) => (
               <HeroSlide
-                key={src}
-                src={src}
-                alt={`Portón ${index + 1}`}
+                key={slide.src}
+                src={slide.src}
+                alt={slide.alt}
+                width={slide.width}
+                height={slide.height}
                 eager={index === 0}
               />
             ))}
@@ -128,19 +184,21 @@ export default function App() {
         >
           <motion.img
             src="/logo.png"
-            alt="Docta Portones"
+            alt="DoctaPortones"
+            width="777"
+            height="777"
             className="mx-auto mb-10 w-72 md:w-96 lg:w-[28rem] drop-shadow-2xl animate-fadeIn"
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 180, damping: 18 }}
           />
           <div className="absolute top-[70%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-full px-4 text-center">
             <h1 className="text-lg md:text-2xl lg:text-3xl text-white drop-shadow-xl">
-              Productos que combinan <span className="text-white font-bold">diseño</span> y{" "}
+              Portones automáticos en Córdoba con <span className="text-white font-bold">diseño</span> y{" "}
               <span className="text-white font-bold">seguridad</span>.
             </h1>
 
             <p className="mt-1 text-[10px] sm:text-[11px] md:text-xs lg:text-sm text-gray-200/80 italic drop-shadow-lg">
-              Todos nuestros productos y motores cuentan con garantía oficial.
+              Fabricación, instalación y automatización a medida en Córdoba Capital y alrededores.
             </p>
           </div>
         </motion.div>
@@ -150,10 +208,10 @@ export default function App() {
       <section id="productos" className="py-14 sm:py-20">
         <div className="container px-4 sm:px-6 mx-auto max-w-7xl">
           <motion.h2 {...fadeIn} className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#154f54] text-center mb-3">
-            Nuestros productos
+            Portones automáticos y manuales a medida
           </motion.h2>
           <motion.p {...fadeIn} className="text-center text-gray-500 text-sm mb-10 max-w-xl mx-auto">
-            Fabricamos a medida con materiales de primera calidad.
+            Fabricamos portones levadizos, corredizos, batientes, puertas y frentes completos con materiales de primera calidad.
           </motion.p>
 
           {/* Mobile: grid 2 columnas / Desktop: bento grid */}
@@ -217,7 +275,7 @@ export default function App() {
                       productTabRefs.current[t] = node;
                     }}
                     type="button"
-                    onClick={() => setActiveProduct(t)}
+                    onClick={() => selectProduct(t)}
                     aria-pressed={active}
                     whileHover={{ y: -3, scale: 1.02 }}
                     whileTap={{ scale: 0.97 }}
@@ -267,7 +325,7 @@ export default function App() {
               <GalleryImage
                 key={src}
                 src={src}
-                alt={`${activeProduct} ${i + 1}`}
+                alt={getGalleryAlt(activeProduct, i)}
                 onClick={() => openModal(i)}
               />
             ))}
@@ -276,15 +334,14 @@ export default function App() {
       </motion.section>
 
       {/* Modal galería */}
-      <AnimatePresence>
-        {selectedImageIndex !== null && (
-          <GalleryModal
-            images={currentImages}
-            initialIndex={selectedImageIndex}
-            onClose={closeModal}
-          />
-        )}
-      </AnimatePresence>
+      {selectedImage && (
+        <GalleryModal
+          key={`${selectedImage.product}-${selectedImage.openedAt}`}
+          images={modalImages}
+          initialIndex={selectedImage.index}
+          onClose={closeModal}
+        />
+      )}
 
       {/* ===== FABRICACIÓN ===== */}
       <section id="fabricacion" className="py-12 sm:py-16 bg-gray-50">
@@ -296,11 +353,11 @@ export default function App() {
             transition={{ duration: 0.6 }}
             className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#154f54] text-center"
           >
-            Fabricación
+            Fabricación de portones
           </motion.h2>
 
           <p className="mt-3 text-center text-gray-500 max-w-2xl mx-auto text-sm sm:text-base">
-            Mirá parte del proceso real de fabricación y algunos trabajos destacados.
+            Mirá parte del proceso real de fabricación, preparación e instalación de portones a medida.
           </p>
 
           <div className="mt-8 sm:mt-10 grid gap-4 sm:gap-6 lg:grid-cols-2 lg:items-stretch">
@@ -351,8 +408,18 @@ export default function App() {
             {/* 2 cards */}
             <div className="flex flex-col gap-4 sm:gap-6">
               {[
-                { title: "Armado y soldadura", desc: "Estructura reforzada y terminaciones prolijas.", img: "/img/fabricacion/1.jpg" },
-                { title: "Pintura y detalles", desc: "Acabado final para máxima durabilidad.", img: "/img/fabricacion/2.jpg" },
+                {
+                  title: "Armado y soldadura",
+                  desc: "Estructura reforzada y terminaciones prolijas.",
+                  img: "/img/fabricacion/1.jpg",
+                  alt: "Armado y soldadura de portón metálico a medida",
+                },
+                {
+                  title: "Pintura y detalles",
+                  desc: "Acabado final para máxima durabilidad.",
+                  img: "/img/fabricacion/2.jpg",
+                  alt: "Terminación y pintura de portón fabricado por DoctaPortones",
+                },
               ].map((item, i) => (
                 <motion.div
                   key={i}
@@ -370,7 +437,9 @@ export default function App() {
                     <source srcSet={toWebp(item.img)} type="image/webp" />
                     <img
                       src={item.img}
-                      alt={item.title}
+                      alt={item.alt}
+                      width="4080"
+                      height="3060"
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04] rounded-xl"
                       loading="lazy"
                       decoding="async"
@@ -401,7 +470,7 @@ export default function App() {
               Cómo trabajamos
             </h2>
             <p className="mt-3 text-sm sm:text-base text-gray-600">
-              Un proceso claro desde la primera consulta hasta la instalación final.
+              Un proceso claro desde la primera consulta hasta la instalación final en Córdoba Capital y alrededores.
             </p>
           </motion.div>
 
@@ -514,7 +583,9 @@ export default function App() {
                 <source srcSet={toWebp("/img/fabricacion/1.jpg")} type="image/webp" />
                 <img
                   src="/img/fabricacion/1.jpg"
-                  alt="Equipo de Docta Portones trabajando en taller"
+                  alt="Equipo de DoctaPortones fabricando portones a medida"
+                  width="4080"
+                  height="3060"
                   className="absolute inset-0 h-full w-full object-cover"
                   loading="lazy"
                   decoding="async"
@@ -535,7 +606,7 @@ export default function App() {
                   text={[
                     "Relevamos cada medida con precisión.",
                     "Fabricamos portones pensados para el uso diario.",
-                    "Instalamos y dejamos todo funcionando.",
+                    "Instalamos, automatizamos y dejamos todo funcionando.",
                   ]}
                   typingSpeed={28}
                   deletingSpeed={16}
@@ -557,10 +628,10 @@ export default function App() {
                 Sobre nosotros
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-gray-600 sm:hidden">
-                Fabricamos e instalamos portones a medida, con materiales de calidad y terminaciones prolijas.
+                Fabricamos, instalamos y automatizamos portones a medida en Córdoba.
               </p>
               <p className="mt-4 hidden text-sm leading-relaxed text-gray-600 sm:block sm:text-base">
-                Nos especializamos en la fabricación e instalación de portones automáticos y manuales. Combinamos materiales de primera calidad, terminaciones prolijas y atención personalizada en cada etapa del proyecto.
+                Nos especializamos en la fabricación, instalación y automatización de portones automáticos y manuales en Córdoba Capital y alrededores. Combinamos materiales de primera calidad, terminaciones prolijas y atención personalizada en cada etapa del proyecto.
               </p>
 
               <div className="mt-4 grid grid-cols-2 gap-2 sm:mt-6 sm:gap-3">
@@ -608,6 +679,10 @@ export default function App() {
           </div>
         </div>
       </section>
+
+      <CustomerReviews />
+
+      </main>
 
       <Footer navItems={NAV_ITEMS} />
 

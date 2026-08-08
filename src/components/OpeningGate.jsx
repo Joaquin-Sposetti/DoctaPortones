@@ -100,7 +100,7 @@ export function OpeningGate() {
               <img
                 src="/icon.png"
                 alt=""
-                className="h-12 w-auto opacity-85 drop-shadow-[0_10px_22px_rgba(0,0,0,0.45)] sm:h-16"
+                className="h-12 w-auto brightness-0 invert opacity-90 drop-shadow-[0_10px_22px_rgba(0,0,0,0.45)] sm:h-16"
                 draggable="false"
               />
             </div>

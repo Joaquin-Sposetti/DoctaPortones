@@ -1,7 +1,7 @@
 import React from "react";
 import { toWebp } from "../lib/media";
 
-export function HeroSlide({ src, alt, eager = false }) {
+export function HeroSlide({ src, alt, eager = false, width, height }) {
   return (
     <div className="slide">
       <picture>
@@ -9,6 +9,8 @@ export function HeroSlide({ src, alt, eager = false }) {
         <img
           src={src}
           alt={alt}
+          width={width}
+          height={height}
           loading={eager ? "eager" : "lazy"}
           decoding="async"
           fetchPriority={eager ? "high" : "auto"}
