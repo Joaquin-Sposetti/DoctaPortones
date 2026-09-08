@@ -100,24 +100,36 @@ export default function App() {
 
   useEffect(() => {
     const activeTab = productTabRefs.current[activeProduct];
-    if (!activeTab || window.innerWidth >= 640) return;
+    const tabs = productTabsRef.current;
+    if (!activeTab || !tabs || window.innerWidth >= 640) return;
 
-    activeTab.scrollIntoView({
+    const nextScrollLeft =
+      activeTab.offsetLeft - tabs.clientWidth / 2 + activeTab.clientWidth / 2;
+
+    tabs.scrollTo({
+      left: nextScrollLeft,
       behavior: "smooth",
-      block: "nearest",
-      inline: "center",
     });
   }, [activeProduct]);
 
-  function selectProduct(title, openCarousel = false) {
+  function selectProduct(title, { openCarousel = false, scrollToGallery = false } = {}) {
     restorePageInteraction();
     setSelectedImage(null);
     setActiveProduct(title);
-    requestAnimationFrame(() => {
-      document
-        .getElementById("producto-galeria")
-        ?.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
+
+    if (scrollToGallery) {
+      requestAnimationFrame(() => {
+        const gallery = document.getElementById("producto-galeria");
+        const navbarHeight = document.querySelector("header")?.offsetHeight || 0;
+
+        if (!gallery) return;
+
+        window.scrollTo({
+          top: gallery.getBoundingClientRect().top + window.scrollY - navbarHeight - 8,
+          behavior: "smooth",
+        });
+      });
+    }
 
     if (openCarousel) {
       setSelectedImage({ product: title, index: 0, openedAt: Date.now() });
@@ -217,22 +229,22 @@ export default function App() {
           {/* Mobile: grid 2 columnas / Desktop: bento grid */}
           <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4 md:auto-rows-[300px]">
             <div className="col-span-2 md:col-span-1 md:row-span-2 min-h-[200px] rounded-xl">
-              <ProductCard c={PRODUCT_CARDS[0]} onSelect={(title) => selectProduct(title, true)} />
+              <ProductCard c={PRODUCT_CARDS[0]} onSelect={(title) => selectProduct(title, { scrollToGallery: true })} />
             </div>
             <div className="col-span-1 min-h-[160px] md:min-h-0 md:col-span-1 md:row-span-1 ">
-              <ProductCard c={PRODUCT_CARDS[1]} onSelect={(title) => selectProduct(title, true)} />
+              <ProductCard c={PRODUCT_CARDS[1]} onSelect={(title) => selectProduct(title, { scrollToGallery: true })} />
             </div>
             <div className="col-span-1 min-h-[160px] md:min-h-0 md:col-span-2 md:row-span-1">
-              <ProductCard c={PRODUCT_CARDS[2]} onSelect={(title) => selectProduct(title, true)} />
+              <ProductCard c={PRODUCT_CARDS[2]} onSelect={(title) => selectProduct(title, { scrollToGallery: true })} />
             </div>
             <div className="col-span-1 min-h-[160px] md:min-h-0 md:col-span-1 md:row-span-1">
-              <ProductCard c={PRODUCT_CARDS[3]} onSelect={(title) => selectProduct(title, true)} />
+              <ProductCard c={PRODUCT_CARDS[3]} onSelect={(title) => selectProduct(title, { scrollToGallery: true })} />
             </div>
             <div className="col-span-1 min-h-[160px] md:min-h-0 md:col-span-1 md:row-span-1">
-              <ProductCard c={PRODUCT_CARDS[4]} onSelect={(title) => selectProduct(title, true)} />
+              <ProductCard c={PRODUCT_CARDS[4]} onSelect={(title) => selectProduct(title, { scrollToGallery: true })} />
             </div>
             <div className="col-span-2 md:col-span-1 md:row-span-1 min-h-[160px]">
-              <ProductCard c={PRODUCT_CARDS[5]} onSelect={(title) => selectProduct(title, true)} />
+              <ProductCard c={PRODUCT_CARDS[5]} onSelect={(title) => selectProduct(title, { scrollToGallery: true })} />
             </div>
           </div>
         </div>
@@ -245,7 +257,7 @@ export default function App() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.35 }}
-        className="py-12 sm:py-16 bg-white border-t border-gray-100"
+        className="scroll-mt-24 py-6 sm:scroll-mt-28 sm:py-16 bg-white border-t border-gray-100"
       >
         <div className="container px-4 sm:px-6 mx-auto max-w-7xl">
           {/* Tabs — scroll horizontal en mobile */}

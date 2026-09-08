@@ -11,7 +11,7 @@ export function GalleryImage({ src, alt, onClick }) {
       onClick={onClick}
       aria-label={`Abrir galería: ${alt}`}
       className="
-        relative overflow-hidden bg-gray-200 ring-1 ring-gray-200
+        relative overflow-hidden bg-gray-900 ring-1 ring-gray-200
         shadow-sm hover:shadow-lg transition-all duration-300
         aspect-[4/3] focus:outline-none rounded-lg
       "
@@ -28,14 +28,13 @@ export function GalleryImage({ src, alt, onClick }) {
       />
 
       <picture>
-        <source srcSet={webpSrc} type="image/webp" />
+        {webpSrc !== src && <source srcSet={webpSrc} type="image/webp" />}
         <img
           src={src}
           alt={alt}
           className={`
-            absolute inset-0 w-full h-full object-cover rounded-lg
+            absolute inset-0 w-full h-full object-cover object-center rounded-lg
             transition-all duration-700 ease-out
-            hover:scale-105
             ${loaded ? "opacity-100" : "opacity-0"}
           `}
           loading="lazy"

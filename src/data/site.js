@@ -87,7 +87,6 @@ export const PRODUCT_GALLERY = {
     "/img/galeria/batientes/3.jpg",
     "/img/galeria/batientes/4.jpg",
     "/img/galeria/batientes/5.jpg",
-    "/img/galeria/batientes/6.jpg",
   ],
   Puertas: [
     "/img/galeria/puertas/1.jpg",

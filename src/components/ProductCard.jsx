@@ -36,7 +36,7 @@ export function ProductCard({ c, onSelect }) {
       />
 
       <picture>
-        <source srcSet={webpSrc} type="image/webp" />
+        {webpSrc !== c.img && <source srcSet={webpSrc} type="image/webp" />}
         <img
           src={c.img}
           alt={c.alt || c.title}
