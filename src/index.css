@@ -149,3 +149,24 @@ body::-webkit-scrollbar-thumb:hover {
   scroll-padding: 1rem;
   -webkit-overflow-scrolling: touch;
 }
+
+.promo-carousel-window {
+  --edge-fade: clamp(1rem, 5vw, 5rem);
+  -webkit-mask-image: linear-gradient(to right, transparent, black var(--edge-fade), black calc(100% - var(--edge-fade)), transparent);
+  mask-image: linear-gradient(to right, transparent, black var(--edge-fade), black calc(100% - var(--edge-fade)), transparent);
+}
+
+.promo-carousel-track {
+  animation: promoCarousel 32s linear infinite;
+}
+
+@keyframes promoCarousel {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .promo-carousel-track {
+    animation-duration: 96s;
+  }
+}

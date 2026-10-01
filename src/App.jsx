@@ -12,6 +12,7 @@ import { Navbar } from "./components/Navbar";
 import { OpeningGate } from "./components/OpeningGate";
 import { ProductCard } from "./components/ProductCard";
 import { ProTextType } from "./components/ProTextType";
+import { PromoCarousel } from "./components/PromoCarousel";
 import {
   NAV_ITEMS,
   PRODUCT_CARDS,
@@ -469,6 +470,8 @@ export default function App() {
           </div>
         </div>
       </section>
+
+      <PromoCarousel />
 
       {/* ===== CÓMO TRABAJAMOS ===== */}
       <section
